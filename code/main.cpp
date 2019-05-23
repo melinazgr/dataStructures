@@ -46,9 +46,7 @@ class commandParser
 
     public:
         commandParser()
-        {
-
-        }
+        {}
 
         // Takes a line like this "BUILD MINHEAP a.txt"
         // and produces three different tokens
@@ -109,7 +107,7 @@ int main()
             const string arg3 = parser.getToken(2);
             const string arg4 = parser.getToken(3);
 
-        
+            // BUILD command
             if(arg1 == CMD_BUILD)
             {
                 if (arg2 == CMD_MINHEAP)

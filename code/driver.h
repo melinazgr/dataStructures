@@ -11,18 +11,46 @@ class driver
     public:
         virtual void insert(int x, int y = 0) = 0;
 
+        // reads from a file with a single number on each line
         void readSingle(const string &filename)
         {
-            //TODO
+            ifstream data;
+            data.open(filename);
 
-            insert(5);
+            if(!data)
+            {
+                //TODO
+                exit(1);
+            }
+
+            int n;
+
+            while(!data.eof())
+            {
+                data >> n;
+                insert(n);
+            }
         }
 
+        // reads from a file with two numbers on each line
         void readPair(const string &filename)
         {
-            //TODO
+            ifstream data;
+            data.open(filename);
 
-            insert(5,3);
+            if(!data)
+            {
+                //TODO
+                exit(1);
+            }
+
+            int a, b;
+
+            while(!data.eof())
+            {
+                data >> a >> b;
+                insert(a,b);
+            }
         }
 };
 
@@ -36,6 +64,19 @@ class minHeapDriver : public driver
         void insert(int x, int y)
         {
             minheap.insert(x);
+        }
+};
+
+class maxHeapDriver : public driver
+{
+    private:
+        maxHeap &maxheap;
+    public: 
+        maxHeapDriver(maxHeap &_maxheap):maxheap(_maxheap){}
+
+        void insert(int x, int y)
+        {
+            maxheap.insert(x);
         }
 };
 
