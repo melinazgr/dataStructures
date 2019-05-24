@@ -3,6 +3,7 @@
 #include <sstream>
 #include <string> 
 #include <vector> 
+#include <ctime> 
 
 #include "minheap.h"
 #include "maxheap.h"
@@ -80,9 +81,74 @@ class commandParser
         }
 };
 
+// returns the execution time 
+double executionTime(clock_t start, clock_t end)
+{
+    return double(end - start) / double (CLOCKS_PER_SEC);
+}
+
+// prints on output text file the results of min heap commands
+void outputMinHeap(minHeap minheap, string command, double time)
+{
+    ofstream output;
+    output.open("commands.txt");
+
+    output << command << " " << CMD_MINHEAP << " : " ;
+
+    if(command == CMD_BUILD || command == CMD_DELETEMIN || command == CMD_INSERT )
+    {
+        for(int i = 0; i < minheap.getSize(); i++)
+        {
+            output << minheap.getData(i) << " ";
+        }
+
+        output << " TIME : " << time << endl;
+    }
+
+    else if(command == CMD_FINDMIN)
+    {
+        output << command << " " << CMD_MINHEAP << " : " << minheap.getData(0) << " TIME : " << time << endl;
+    }
+
+    else if(command == CMD_GETSIZE)
+    {
+        output << command << " " << CMD_MINHEAP << " : " << minheap.getSize() << " TIME : " << time << endl;
+    }
+}
+
+// prints on output text file the results of min heap commands
+void outputMaxHeap(maxHeap maxheap, string command, double time)
+{
+    ofstream output;
+    output.open("commands.txt");
+
+    output << command << " " << CMD_MAXHEAP << " : " ;
+
+    if(command == CMD_BUILD || command == CMD_DELETEMAX || command == CMD_INSERT )
+    {
+        for(int i = 0; i < maxheap.getSize(); i++)
+        {
+            output << maxheap.getData(i) << " ";
+        }
+
+        output << " TIME : " << time << endl;
+    }
+
+    else if(command == CMD_FINDMAX)
+    {
+        output << command << " " << CMD_MAXHEAP << " : " << maxheap.getData(0) << " TIME : " << time << endl;
+    }
+
+    else if(command == CMD_GETSIZE)
+    {
+        output << command << " " << CMD_MAXHEAP << " : " << maxheap.getSize() << " TIME : " << time << endl;
+    }
+}
+
 int main()
 {
     minHeap minheap; 
+    maxHeap maxheap; 
 
     ifstream commands;
     commands.open("commands.txt");
@@ -95,8 +161,10 @@ int main()
 
     int a, b;
     string line, word, filename;
-    
+        
     commandParser parser;
+
+    clock_t start, end;
 
     while (getline(commands, line))
     {   
@@ -114,12 +182,24 @@ int main()
                 {
                     cout<<"build minheap "<<arg3<<endl;  
                     minHeapDriver minHeapBuilder(minheap);
+                    start = clock(); //start timer
                     minHeapBuilder.readSingle(arg3);
+                    end = clock();//end timer
+
+                    double time = executionTime(start,end); 
+                    outputMinHeap(minheap, CMD_BUILD, time);
                 }
 
                 else if (arg2 == CMD_MAXHEAP)
                 {
                     cout<<"build MAXHEAP "<<arg3<<endl;   
+                    maxHeapDriver maxHeapBuilder(maxheap);
+                    start = clock(); //start timer
+                    maxHeapBuilder.readSingle(arg3);
+                    end = clock();//end timer
+
+                    double time = executionTime(start,end); 
+                    outputMaxHeap(maxheap, CMD_BUILD, time);
                 }
                 
                 else if (arg2 == CMD_AVLTREE)
@@ -138,6 +218,7 @@ int main()
                 }
             }
 
+            // INSERT command
             else if (arg1 == CMD_INSERT)
             {
                 if (arg2 == CMD_MINHEAP)
@@ -166,6 +247,7 @@ int main()
                 }
             }
 
+            // GETSIZE command
             else if (arg1 == CMD_GETSIZE)
             {
                 if (arg2 == CMD_MINHEAP)
@@ -194,6 +276,7 @@ int main()
                 }
             }
 
+            // FINDMIN/FINMAX command
             else if (arg1 == CMD_FINDMIN || arg1 == CMD_FINDMAX)
             {
                  if (arg2 == CMD_MINHEAP)
@@ -212,6 +295,7 @@ int main()
                 }
             }
 
+            // DELETEMIN/DELETEMAX/DELETE command            
             else if (arg1 == CMD_DELETEMIN || arg1 == CMD_DELETEMAX || arg1 == CMD_DELETE)
             {
                  if (arg2 == CMD_MINHEAP)
@@ -235,6 +319,7 @@ int main()
                 }
             }
 
+            // SEARCH command
             else if (arg1 == CMD_SEARCH)
             {
                 if (arg2 == CMD_AVLTREE)
@@ -246,6 +331,24 @@ int main()
                 {
                     cout<<"SEARCH AVL "<<arg3<<endl;   
                 }
+            }
+
+            // COMPUTESHORTESTPATH command
+            else if (arg1 == CMD_COMPUTESHORTESTPATH)
+            {
+                cout<<"COMPUTESHORTESTPATH CMD_GRAPH  "<<arg3<<endl;   
+            }
+
+            // COMPUTESPANNINGTREE command
+            else if (arg1 == CMD_COMPUTESPANNINGTREE)
+            {
+                cout<<"COMPUTESPANNINGTREE CMD_GRAPH  "<<arg3<<endl;   
+            }
+            
+            // FINDCONNECTEDCOMPONENTS command
+            else if (arg1 == CMD_FINDCONNECTEDCOMPONENTS)
+            {
+                cout<<"FINDCONNECTEDCOMPONENTS CMD_GRAPH  "<<arg3<<endl;   
             }
         }
     }

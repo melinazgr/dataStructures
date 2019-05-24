@@ -3,7 +3,7 @@
 using namespace std;
 
 // constructor: builds a heap of given size
-maxHeap::maxHeap(int capacity)
+maxHeap::maxHeap()
 {
     int size = 0;
     this->capacity = capacity;
@@ -14,6 +14,18 @@ maxHeap::maxHeap(int capacity)
 maxHeap::~maxHeap()
 {
     delete [] data;
+}
+
+// returns the size of the max heap
+int maxHeap::getSize()
+{
+    return size;
+}
+
+// returns index i of data array
+int maxHeap::getData(int i)
+{
+    return data[i];
 }
 
 //returns the index of the parent of a node
@@ -47,6 +59,7 @@ void maxHeap::swap(int *x, int*y)
     *x = *y;
     *y = temp;
 }
+
 // inserts a new number 'x' in the heap
 void maxHeap::insert(int x)
 {
@@ -83,11 +96,14 @@ void maxHeap::insert(int x)
 // deletes the maximum element of max heap (root)
 void maxHeap::deleteMax()
 {
-    
-}
+    // replace the deleted node (minimum element) with the farthest node
+    data[0] = data[size - 1]; 
+    int i = size;
 
-// builds max heap
-void maxHeap::buildMaxHeap(int size)
-{
-    
+    // fix the max heap if it is violated by the deletion
+    while(i != 0 && data[parent(i)] < data[i])
+    {
+        swap(&data[parent(i)], &data[i]);
+        i = parent(i);
+    } 
 }

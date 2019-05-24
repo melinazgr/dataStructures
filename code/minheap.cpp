@@ -16,6 +16,18 @@ minHeap::~minHeap()
     delete [] data;
 }
 
+// returns the size of the min heap
+int minHeap::getSize()
+{
+    return size;
+}
+
+// returns index i of data array
+int minHeap::getData(int i)
+{
+    return data[i];
+}
+
 //returns the index of the parent of a node
 int minHeap::parent(int i)
 {
@@ -47,6 +59,7 @@ void minHeap::swap(int *x, int*y)
     *x = *y;
     *y = temp;
 }
+
 // inserts a new number 'x' in the heap
 void minHeap::insert(int x)
 {
@@ -68,7 +81,7 @@ void minHeap::insert(int x)
 
     // insert the new element at the end 
     // and then increase the size of the heap
-    int i = size - 1; // the position of the new element
+    int i = size; // the position of the new element
     data[i] = x;
     size++;
 
@@ -84,5 +97,14 @@ void minHeap::insert(int x)
 // deletes the minimum element of min heap (root)
 void minHeap::deleteMin()
 {
-    
+    // replace the deleted node (minimum element) with the farthest node
+    data[0] = data[size - 1]; 
+    int i = size;
+
+    // fix the min heap if it is violated by the deletion
+    while(i != 0 && data[parent(i)] > data[i])
+    {
+        swap(&data[parent(i)], &data[i]);
+        i = parent(i);
+    } 
 }

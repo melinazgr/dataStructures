@@ -6,6 +6,7 @@
 #include "hashtable.h"
 #include "graph.h"
 
+// class to read files with data to build each data structure
 class driver
 {
     public:

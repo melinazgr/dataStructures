@@ -13,10 +13,16 @@ class maxHeap
 
     public:
         // constructor
-        maxHeap(int size); 
+        maxHeap(); 
 
         // destructor
         ~maxHeap();
+        
+        // returns the size of the max heap
+        int getSize();
+
+        // returns index i of data array
+        int getData(int i);
 
         //returns the index of the parent of a node
         int parent(int i);
@@ -35,12 +41,6 @@ class maxHeap
 
         // deletes the maximum element of max heap (root)
         void deleteMax();
-        
-        // returns the size of the max heap
-        int getSize();
-
-        // builds max heap
-        void buildMaxHeap(int size);
 
         // swaps two elements
         void swap(int *x, int *y);

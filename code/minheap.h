@@ -1,4 +1,4 @@
-#pragma once 
+    #pragma once 
 #include <iostream>
 
 using namespace std;
@@ -18,16 +18,22 @@ class minHeap
         // destructor
         ~minHeap();
 
-        //returns the index of the parent of a node
+        // returns the size of the min heap
+        int getSize();
+
+        // returns index i of data array
+        int getData(int i);
+        
+        // returns the index of the parent of a node
         int parent(int i);
 
-        //returns the index of the left child of a node
+        // returns the index of the left child of a node
         int left(int i);
 
-        //returns the index of the right child of a node
+        // returns the index of the right child of a node
         int right(int i);
         
-        //returns the minimum element of the min heap
+        // returns the minimum element of the min heap
         int findMin();
 
         // inserts a new number 'x'
@@ -36,9 +42,9 @@ class minHeap
         // deletes the minimum element of min heap (root)
         void deleteMin();
         
-        // returns the size of the min heap
-        int getSize();
-
         // swaps two elements
         void swap(int *x, int *y);
+
+        // prints in output file
+        void output(string command,  double time);       
 };
