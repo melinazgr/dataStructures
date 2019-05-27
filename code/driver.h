@@ -18,7 +18,8 @@ class driver
             ifstream data;
             data.open(filename);
 
-            if(!data)
+           
+            if(!data.is_open())
             {
                 //TODO
                 exit(1);
@@ -39,7 +40,7 @@ class driver
             ifstream data;
             data.open(filename);
 
-            if(!data)
+            if(!data.is_open())
             {
                 //TODO
                 exit(1);

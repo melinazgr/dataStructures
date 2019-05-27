@@ -7,6 +7,7 @@
 
 #include "minheap.h"
 #include "maxheap.h"
+#include "heap.h"
 #include "avl.h"
 #include "hashtable.h"
 #include "graph.h"
@@ -15,6 +16,7 @@
 // include cpp files so as to compile main.cpp only
 #include "minheap.cpp"
 #include "maxheap.cpp"
+#include "heap.cpp"
 #include "avl.cpp"
 #include "hashtable.cpp"
 #include "graph.cpp"
@@ -87,19 +89,19 @@ double executionTime(clock_t start, clock_t end)
     return double(end - start) / double (CLOCKS_PER_SEC);
 }
 
-// prints on output text file the results of min heap commands
-void outputMinHeap(minHeap minheap, string command, double time)
+// prints on output text file the results of minheap/maxheap commands
+void outputHeap(heap &heap, string dataStructure, string command, double time)
 {
     ofstream output;
-    output.open("commands.txt");
+    output.open("output.txt");
 
-    output << command << " " << CMD_MINHEAP << " : " ;
-
-    if(command == CMD_BUILD || command == CMD_DELETEMIN || command == CMD_INSERT )
+    if(command == CMD_BUILD || command == CMD_DELETEMIN || command == CMD_INSERT)
     {
-        for(int i = 0; i < minheap.getSize(); i++)
+        output << command << " " << dataStructure << " : " ;
+
+        for(int i = 0; i < heap.getSize() - 1; i++)
         {
-            output << minheap.getData(i) << " ";
+            output << heap.getData(i) << " ";
         }
 
         output << " TIME : " << time << endl;
@@ -107,42 +109,15 @@ void outputMinHeap(minHeap minheap, string command, double time)
 
     else if(command == CMD_FINDMIN)
     {
-        output << command << " " << CMD_MINHEAP << " : " << minheap.getData(0) << " TIME : " << time << endl;
+        output << command << " " << dataStructure << " : " << heap.getData(0) << " TIME : " << time << endl;
     }
 
     else if(command == CMD_GETSIZE)
     {
-        output << command << " " << CMD_MINHEAP << " : " << minheap.getSize() << " TIME : " << time << endl;
-    }
-}
-
-// prints on output text file the results of min heap commands
-void outputMaxHeap(maxHeap maxheap, string command, double time)
-{
-    ofstream output;
-    output.open("commands.txt");
-
-    output << command << " " << CMD_MAXHEAP << " : " ;
-
-    if(command == CMD_BUILD || command == CMD_DELETEMAX || command == CMD_INSERT )
-    {
-        for(int i = 0; i < maxheap.getSize(); i++)
-        {
-            output << maxheap.getData(i) << " ";
-        }
-
-        output << " TIME : " << time << endl;
+        output << command << " " << dataStructure << " : " << heap.getSize() << " TIME : " << time << endl;
     }
 
-    else if(command == CMD_FINDMAX)
-    {
-        output << command << " " << CMD_MAXHEAP << " : " << maxheap.getData(0) << " TIME : " << time << endl;
-    }
-
-    else if(command == CMD_GETSIZE)
-    {
-        output << command << " " << CMD_MAXHEAP << " : " << maxheap.getSize() << " TIME : " << time << endl;
-    }
+    output.close();
 }
 
 int main()
@@ -153,8 +128,9 @@ int main()
     ifstream commands;
     commands.open("commands.txt");
 
-    if(!commands)
+    if(!commands.is_open())
     {
+        cerr << " commands not open"<<endl;
         //TODO
         exit(1);
     }
@@ -166,8 +142,9 @@ int main()
 
     clock_t start, end;
 
-    while (getline(commands, line))
+    while (!commands.eof())
     {   
+        getline(commands, line);
         if (parser.parse(line))
         {
             const string arg1 = parser.getToken(0);
@@ -184,10 +161,10 @@ int main()
                     minHeapDriver minHeapBuilder(minheap);
                     start = clock(); //start timer
                     minHeapBuilder.readSingle(arg3);
-                    end = clock();//end timer
+                    end = clock(); //end timer
 
                     double time = executionTime(start,end); 
-                    outputMinHeap(minheap, CMD_BUILD, time);
+                    outputHeap(minheap, CMD_MINHEAP, CMD_BUILD, time);
                 }
 
                 else if (arg2 == CMD_MAXHEAP)
@@ -199,7 +176,7 @@ int main()
                     end = clock();//end timer
 
                     double time = executionTime(start,end); 
-                    outputMaxHeap(maxheap, CMD_BUILD, time);
+                    outputHeap(maxheap, CMD_MAXHEAP, CMD_BUILD, time);
                 }
                 
                 else if (arg2 == CMD_AVLTREE)
@@ -279,7 +256,7 @@ int main()
             // FINDMIN/FINMAX command
             else if (arg1 == CMD_FINDMIN || arg1 == CMD_FINDMAX)
             {
-                 if (arg2 == CMD_MINHEAP)
+                if (arg2 == CMD_MINHEAP)
                 {
                     cout<<"FINDMIN minheap "<<arg3<<endl;  
                 }
@@ -298,7 +275,7 @@ int main()
             // DELETEMIN/DELETEMAX/DELETE command            
             else if (arg1 == CMD_DELETEMIN || arg1 == CMD_DELETEMAX || arg1 == CMD_DELETE)
             {
-                 if (arg2 == CMD_MINHEAP)
+                if (arg2 == CMD_MINHEAP)
                 {
                     cout<<"DELETEMIN minheap "<<arg3<<endl;  
                 }

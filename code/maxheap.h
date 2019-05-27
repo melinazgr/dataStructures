@@ -1,47 +1,13 @@
 #pragma once 
 #include <iostream>
-
-using namespace std;
+#include "heap.h"
 
 //class for min heap
-class maxHeap
+class maxHeap : public heap
 {
-    private:
-        int* data; // pointer to array of elemenets in the heap
-        int capacity; // maximun possible size of the max heap
-        int size; // current number of elements in the max heap
-
     public:
-        // constructor
-        maxHeap(); 
+        virtual void adjustHeap(int i);
 
-        // destructor
-        ~maxHeap();
-        
-        // returns the size of the max heap
-        int getSize();
-
-        // returns index i of data array
-        int getData(int i);
-
-        //returns the index of the parent of a node
-        int parent(int i);
-
-        //returns the index of the left child of a node
-        int left(int i);
-
-        //returns the index of the right child of a node
-        int right(int i);
-        
-        //returns the maximum element of the max heap
-        int findMax();
-
-        // inserts a new number 'x'
-        void insert(int x);
-
-        // deletes the maximum element of max heap (root)
-        void deleteMax();
-
-        // swaps two elements
-        void swap(int *x, int *y);
+        // deletes the minimum element of max heap (root)
+        virtual void deleteRoot();
 };
