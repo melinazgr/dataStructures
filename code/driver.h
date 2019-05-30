@@ -87,7 +87,7 @@ class avlDriver : public driver
     /*private:
         avlTree &avl;
     public: 
-        avlDriver(avlTree &_avl, const string &filename):driver(filename),avl(_avl){}
+        avlDriver(avlTree &_avl):avl(_avl){}
 
         void insert(int x, int y)
         {
@@ -95,4 +95,17 @@ class avlDriver : public driver
         }
 
        */
+};
+
+class hashDriver : public driver
+{
+    private:
+        hashTable &hash;
+    public: 
+        hashDriver(hashTable &_hash):hash(_hash){}
+
+        void insert(int x, int y)
+        {
+            hash.insert(x);
+        }
 };

@@ -64,7 +64,7 @@ void heap::swap(int *x, int*y)
 // inserts a new number 'x'
 void heap::insert(int x)
 {
-    // if the array is full create a new one with doubled size
+    // if the array is full create a new one with long doubled size
     if(size == capacity)
     {
         int newCapacity = capacity * 2;
