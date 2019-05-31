@@ -1,7 +1,6 @@
 #pragma once 
 
 #include "sortedLinkedList.h"
-#include <iostream>
 
 class hashTable 
 {

@@ -1,7 +1,5 @@
 #include "maxheap.h"
 
-using namespace std;
-
 // inserts a new number 'x' in the heap
 void maxHeap::adjustHeap(int i)
 {

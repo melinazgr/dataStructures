@@ -38,7 +38,7 @@ class sortedLinkedList
         {
             linkedListNode* temp = head;  //use temp to not lose reference of the head 
 
-            while (temp && (x < temp->data))
+            while (temp && (x > temp->data))
             {
                 temp = temp->next;
             }

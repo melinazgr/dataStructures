@@ -6,7 +6,6 @@
 
 using namespace std::chrono;
 
-
 class stopwatch
 {
     private:

@@ -14,6 +14,7 @@
 
 #include "driver.h"
 #include "stopwatch.h"
+#include "linkedList.h"
 
 // include cpp files so as to compile main.cpp only
 #include "minheap.cpp"
@@ -95,7 +96,7 @@ void outputHeap(string dataStructure, string command, int data, ofstream &output
         output << command << " " << dataStructure;
 
         #ifdef DEBUG_DS
-        for (int i = 0; i < heap.getSize() - 1; i++)
+        for (int i = 0; i < data - 1; i++)
         {
             output << heap.getData(i) << " ";
         }
@@ -199,7 +200,6 @@ int main()
                 if (arg2 == CMD_MINHEAP)
                 {
                     minHeapDriver minHeapBuilder(minheap);
-                   
                     minHeapBuilder.readSingle(arg3);
 
                     outputHeap(CMD_MINHEAP, CMD_BUILD, 0, output, timer.elapsed());
@@ -218,7 +218,8 @@ int main()
                 }
                 
                 else if (arg2 == CMD_HASHTABLE)
-                {
+                {   
+                    
                     hashDriver hashTableBuilder(hash);
                     hashTableBuilder.readSingle(arg3);
 

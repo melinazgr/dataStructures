@@ -1,7 +1,5 @@
 #include "heap.h"
 
-using namespace std;
-
 // constructor: builds a heap of given size
 heap::heap()
 {

@@ -1,7 +1,5 @@
 #include "hashtable.h"
 
-using namespace std;
-
 hashTable::hashTable(int capacity)
 {
     size = 0;

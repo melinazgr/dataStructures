@@ -1,1 +1,1 @@
-#include <iostream>
+#pragma once
