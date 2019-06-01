@@ -1,5 +1,6 @@
 #pragma once
 
+
 struct avlNode
 {
     int data;
@@ -13,8 +14,8 @@ struct avlNode
     {
         data = x;
         height = 0;
-        left = NULL;
-        right = NULL;
+        left = nullptr;
+        right = nullptr;
     }
 };
 
@@ -31,23 +32,10 @@ class avlTree
 
         avlNode* insert(int data, avlNode* p);
 
-    public:
-        avlTree();
+        avlNode* search(int data, avlNode* p);
 
-        ~avlTree();
-
-        void insert(int data);
-
-        void deleteNode(int data);
+        avlNode* findMin(avlNode* p);
         
-        int getSize();
-
-        int findMin();
-
-        bool search();
-
-        int height(avlNode* p);
-
         void rotateLL(avlNode* &p);
 
         void rotateLR(avlNode* &p);
@@ -55,5 +43,25 @@ class avlTree
         void rotateRR(avlNode* &p);
 
         void rotateRL(avlNode* &p);
+
+
+    public:
+        avlTree();
+
+        ~avlTree();
+
+        void insert(int data);
+
+        bool search(int data);
+        
+        void deleteNode(int data);
+        
+        int getSize();
+
+        int findMin();
+
+        int height(avlNode* p);
+        
+        avlNode* getRoot(); // for test purposes
 
 };

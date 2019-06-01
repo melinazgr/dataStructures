@@ -18,7 +18,7 @@ class sortedLinkedList
     public:
         sortedLinkedList()
         {
-            head = NULL;
+            head = nullptr;
         }
 
         ~sortedLinkedList()
@@ -26,7 +26,7 @@ class sortedLinkedList
             linkedListNode* temp = head;  //use temp to not lose reference of the head 
             linkedListNode* prev;
 
-            while (temp != NULL)
+            while (temp != nullptr)
             {
                 prev = temp;
                 temp = temp->next;
@@ -54,7 +54,7 @@ class sortedLinkedList
         void insert(int x)
         {
             linkedListNode* p = head;
-            linkedListNode* prevP = NULL;
+            linkedListNode* prevP = nullptr;
 
             while (p && p->data < x)
             {  

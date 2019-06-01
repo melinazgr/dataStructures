@@ -15,7 +15,7 @@ class linkedList
     public:
         linkedList()
         {
-            head = NULL;
+            head = nullptr;
             size = 0;
         }
 
@@ -24,7 +24,7 @@ class linkedList
             node* temp = head;  //use temp to not lose reference of the head 
             node* prev;
 
-            while (temp != NULL)
+            while (temp != nullptr)
             {
                 prev = temp;
                 temp = temp->next;

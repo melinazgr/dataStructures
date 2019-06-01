@@ -1,9 +1,12 @@
 #include "avl.h"
 
+#include <algorithm>
+using namespace std;
+
 avlTree::avlTree()
 {
     size = 0;
-    root = NULL;
+    root = nullptr;
 }
 
 avlTree::~avlTree()
@@ -26,11 +29,16 @@ void avlTree::cleanup(avlNode* p)
     }
 }
 
+int avlTree::getSize()
+{
+    return size;
+}
+
 avlNode* avlTree::insert(int data, avlNode* p)
 {
     avlNode* t;
 
-    if (p == NULL)
+    if (p == nullptr)
     {
         size++;
         t = new avlNode(data);
@@ -38,12 +46,23 @@ avlNode* avlTree::insert(int data, avlNode* p)
 
     else if(data < p->data)
     {
+        
         t = insert(data, p->left);
+        
+        if(p->left == nullptr)
+        {
+            p->left = t;
+        }
     }
 
     else
     {
         t = insert(data, p->right);
+
+        if(p->right == nullptr)
+        {
+            p->right = t;
+        }
     }
 
     balance(p);
@@ -53,7 +72,7 @@ avlNode* avlTree::insert(int data, avlNode* p)
 
 void avlTree::insert(int data)
 {
-    if (root == NULL)
+    if (root == nullptr)
     {
         root = insert(data, root);
     }
@@ -66,9 +85,120 @@ void avlTree::insert(int data)
 
 int avlTree::height(avlNode* p)
 {
-    return p == NULL ? 0 : p->height;
+    return p == nullptr ? -1 : p->height; 
 }
 
+bool avlTree::search(int data)
+{
+    return search(data, root) != nullptr;
+}
+
+
+avlNode* avlTree::search(int data, avlNode* p)
+{
+    if (p == nullptr)
+    {
+        return nullptr;
+    }
+
+    // go left
+    if(p->data > data)
+    {
+        return search(data, p->left);
+    }
+
+    // go right
+    else if(p->data < data)
+    {
+        return search(data, p->right);
+    }
+
+    else
+    {
+        return p;
+    }
+}
+
+void avlTree::deleteNode(int data)
+{
+    avlNode* p = search(data, root);
+    
+    if(!p)
+    {
+        return;
+    }
+
+    if(p->left && p->right)
+    {
+        avlNode* n = findMin(p);
+        p->data = n->data;
+
+        avlNode* temp = p;
+        
+        // delete node n
+        while(temp->left != n)
+        {
+            temp = temp->left;
+        }
+
+        temp->left = nullptr;
+        
+        delete n;
+    }
+
+    else if(p->left)
+    {
+        p->data = p->left->data;
+
+        avlNode* temp = p->left;
+
+        p->left = temp->left;
+        p->right = temp->right;
+
+        delete temp;
+    }
+
+    else if(p->right)
+    { 
+        p->data = p->right->data;
+
+        avlNode* temp = p->right;
+
+        p->left = temp->left;
+        p->right = temp->right;
+
+        delete temp;
+    }
+
+    balance(p);
+}
+
+avlNode* avlTree::findMin(avlNode* p)
+{
+    while(p->left)
+    {
+        p = p->left;
+    }
+
+    return p;
+}
+
+int avlTree::findMin()
+{
+    // if the tree is empty return the minimun possible integer (32 bits)
+    if(!root)
+    {
+        return INT32_MIN;
+    }
+
+    avlNode* min = findMin(root);
+    return min->data;
+}
+
+//
+// https://www.hackerrank.com/challenges/self-balancing-tree/problem
+// https://www.tutorialspoint.com/data_structures_algorithms/avl_tree_algorithm.htm
+//
 //            O
 //          O   O
 //            O
@@ -113,7 +243,7 @@ void avlTree::rotateRL(avlNode* &a)
 
 void avlTree::balance(avlNode* &p)
 {
-    if (p == NULL)
+    if (p == nullptr)
     {
         return;
     }
@@ -157,4 +287,9 @@ void avlTree::balance(avlNode* &p)
     }
 
     p->height = max(height(p->left), height(p->right)) + 1;
+}
+
+avlNode* avlTree::getRoot()
+{
+    return root;
 }
