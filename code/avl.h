@@ -30,7 +30,7 @@ class avlTree
 
         void balance(avlNode* &p);
 
-        avlNode* insert(int data, avlNode* p);
+        void insert(int data, avlNode* &p);
 
         avlNode* search(int data, avlNode* p);
 

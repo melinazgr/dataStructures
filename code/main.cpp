@@ -123,12 +123,12 @@ void outputHeap(string dataStructure, string command, int data, ofstream &output
 
 void outputHash(string command, int data, bool result, ofstream &output, double time)
 {
-    if (command == CMD_BUILD || command == CMD_INSERT)
+    if (command == CMD_BUILD)
     {
         output << command << " " << CMD_HASHTABLE;
     }
-    
-    else if (command == CMD_GETSIZE)
+
+    else if (command == CMD_INSERT || command == CMD_GETSIZE)
     {
         output << command << " " << CMD_HASHTABLE << " : " << data;
     }
@@ -151,11 +151,42 @@ void outputHash(string command, int data, bool result, ofstream &output, double 
     output << "|| TIME : " << setprecision(10) << time << endl;
 }
 
+void outputAvl(string command, int data, bool result, ofstream &output, double time)
+{
+    if (command == CMD_BUILD)
+    {
+        output << command << " " << CMD_AVLTREE;
+    }
+    
+    else if (command == CMD_GETSIZE || command == CMD_INSERT || command == CMD_DELETE || command == CMD_FINDMIN )
+    {
+        output << command << " " << CMD_AVLTREE << " : " << data;
+    }
+
+    else if (command == CMD_SEARCH)
+    {
+        output << command << " " << CMD_AVLTREE << " " << data << " : ";
+        
+        if (result) 
+        {
+            output <<"SUCCESS";
+        }
+
+        else
+        {
+            output << "FAILURE";
+        }
+    }
+
+    output << "|| TIME : " << setprecision(10) << time << endl;
+}
+
 int main()
 {
     minHeap minheap; 
     maxHeap maxheap; 
     hashTable hash;
+    avlTree avl;
 
     ifstream commands;
     commands.open("commands.txt");
@@ -215,11 +246,16 @@ int main()
                 
                 else if (arg2 == CMD_AVLTREE)
                 {
+                    cout << "avl build" << endl;
+
+                    avlDriver avlBuilder(avl);
+                    avlBuilder.readSingle(arg3);
+                    
+                    outputAvl(CMD_BUILD, 0, false, output, timer.elapsed());
                 }
                 
                 else if (arg2 == CMD_HASHTABLE)
                 {   
-                    
                     hashDriver hashTableBuilder(hash);
                     hashTableBuilder.readSingle(arg3);
 
@@ -252,12 +288,18 @@ int main()
                 
                 else if (arg2 == CMD_AVLTREE)
                 {
+                    cout << "insert build" << endl;
+
+                    int data = stoi(arg3);
+                    avl.insert(data);
+                    outputAvl(CMD_INSERT, data, false, output, timer.elapsed());
                 }
                 
                 else if (arg2 == CMD_HASHTABLE)
                 {
-                    hash.insert(stoi(arg3));
-                    outputHash(CMD_INSERT, 0, false, output, timer.elapsed());  
+                    int data = stoi(arg3);
+                    hash.insert(data);
+                    outputHash(CMD_INSERT, data, false, output, timer.elapsed());  
                 }
 
                 else if (arg2 == CMD_GRAPH)
@@ -282,6 +324,8 @@ int main()
                 
                 else if (arg2 == CMD_AVLTREE)
                 {
+                    int size = avl.getSize();
+                    outputAvl(CMD_GETSIZE, size, false, output, timer.elapsed());
                 }
                 
                 else if (arg2 == CMD_HASHTABLE)
@@ -332,6 +376,10 @@ int main()
 
                 else if (arg2 == CMD_AVLTREE)
                 {
+                    int data = stoi(arg3);
+                    avl.deleteNode(data);
+
+                    outputAvl(CMD_DELETE, data, false, output, timer.elapsed());
                 }
 
                 else if (arg2 == CMD_GRAPH)
@@ -344,6 +392,10 @@ int main()
             {
                 if (arg2 == CMD_AVLTREE)
                 {
+                    int data = stoi(arg3);
+                    bool found = avl.search(data);
+
+                    outputAvl(CMD_DELETE, data, found, output, timer.elapsed());
                 }
                 
                 else if (arg2 == CMD_HASHTABLE)

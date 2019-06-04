@@ -1,5 +1,8 @@
 #include "avl.h"
 
+#include <iostream>
+#include <limits>
+#include <cstdint>
 #include <algorithm>
 using namespace std;
 
@@ -34,53 +37,30 @@ int avlTree::getSize()
     return size;
 }
 
-avlNode* avlTree::insert(int data, avlNode* p)
+void avlTree::insert(int data, avlNode* &p)
 {
-    avlNode* t;
-
     if (p == nullptr)
     {
         size++;
-        t = new avlNode(data);
+        p = new avlNode(data);
     }
 
     else if(data < p->data)
     {
-        
-        t = insert(data, p->left);
-        
-        if(p->left == nullptr)
-        {
-            p->left = t;
-        }
+        insert(data, p->left);
     }
 
     else
     {
-        t = insert(data, p->right);
-
-        if(p->right == nullptr)
-        {
-            p->right = t;
-        }
+        insert(data, p->right);
     }
 
     balance(p);
-
-    return t;
 }
 
 void avlTree::insert(int data)
 {
-    if (root == nullptr)
-    {
-        root = insert(data, root);
-    }
-
-    else
-    {
-        insert(data, root);
-    }
+    insert(data, root);
 }
 
 int avlTree::height(avlNode* p)
@@ -170,6 +150,37 @@ void avlTree::deleteNode(int data)
         delete temp;
     }
 
+    else
+    {
+        avlNode* temp = root;
+        
+        while(temp->left != p || temp->right != p)
+        {
+            if(temp->data > p->data )
+            {
+                temp = temp->left;
+            }
+
+            else if(temp->data < p->data)
+            {
+                temp = temp->right;
+            }
+        }
+
+        if(temp->right)
+        {
+            temp->right = nullptr;
+        }
+
+        else if(temp->left)
+        {
+            temp->left = nullptr;
+        }
+        
+        p = temp;
+        delete temp;
+    }
+    
     balance(p);
 }
 
@@ -201,19 +212,36 @@ int avlTree::findMin()
 //
 //            O
 //          O   O
-//            O
+//            O *
 //
 void avlTree::rotateLL(avlNode* &a)
 {
-    avlNode* b = a->left;
+    if(a->left)
+    {
+        avlNode* b = a->left;
 
-    a->left = b->right;
-    a->height = max(height(a->left), height(a->right)) + 1;
+        a->left = b->right;
+        a->height = max(height(a->left), height(a->right)) + 1;
 
-    b->right = a;
-    b->height = max(height(b->left), height(b->right)) + 1;
+        b->right = a;
+        b->height = max(height(b->left), height(b->right)) + 1;
+        
+        a = b;
+    }
+
+    else
+    {
+        avlNode* b = a->right;
+
+        b->left = a;
+        a->right = nullptr;
+
+        a->height = max(height(a->left), height(a->right)) + 1;
+        b->height = max(height(b->left), height(b->right)) + 1;
+
+        a = b;
+    }
     
-    a = b;
 }
 
 void avlTree::rotateLR(avlNode* &a)
@@ -224,15 +252,32 @@ void avlTree::rotateLR(avlNode* &a)
 
 void avlTree::rotateRR(avlNode* &a)
 {
-    avlNode* b = a->right;
+    if(a->right)
+    {
+        avlNode* b = a->right;
 
-    a->right = b->left;
-    a->height = max(height(a->right), height(a->left)) + 1;
+        a->right = b->left;
+        a->height = max(height(a->right), height(a->left)) + 1;
 
-    b->left = a;
-    b->height = max(height(b->right), height(b->left)) + 1;
+        b->left = a;
+        b->height = max(height(b->right), height(b->left)) + 1;
+        
+        a = b;
+    }
     
-    a = b;
+     else
+    {
+        avlNode* b = a->left;
+
+        b->right = a;
+        a->left = nullptr;
+
+        a->height = max(height(a->left), height(a->right)) + 1;
+        b->height = max(height(b->left), height(b->right)) + 1;
+
+        a = b;
+
+    }
 }
 
 void avlTree::rotateRL(avlNode* &a)
@@ -255,7 +300,7 @@ void avlTree::balance(avlNode* &p)
         // check if we have to do LL or LR
         //
         // RR- child is left heavy
-        // RL - child is right heavy
+        // LR - child is right heavy
 
         if ((height(p->left->left) -  height(p->left->right)) > 0) 
         {
@@ -264,7 +309,7 @@ void avlTree::balance(avlNode* &p)
 
         else
         {
-            rotateRL(p);
+            rotateLR(p);
         }
     }
 
@@ -273,7 +318,7 @@ void avlTree::balance(avlNode* &p)
         // check if we have to do RR or RL
         //
         // LL - child is right heavy
-        // LR - child is left heavy
+        // RL - child is left heavy
 
         if (height(p->right->right) - (height(p->right->left)) > 0) 
         {
@@ -282,7 +327,7 @@ void avlTree::balance(avlNode* &p)
 
         else
         {
-            rotateLR(p);
+            rotateRL(p);
         }
     }
 

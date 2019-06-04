@@ -84,7 +84,7 @@ class maxHeapDriver : public driver
 
 class avlDriver : public driver
 {
-    /*private:
+    private:
         avlTree &avl;
     public: 
         avlDriver(avlTree &_avl):avl(_avl){}
@@ -93,8 +93,6 @@ class avlDriver : public driver
         {
             avl.insert(x);
         }
-
-       */
 };
 
 class hashDriver : public driver
