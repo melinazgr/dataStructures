@@ -44,6 +44,10 @@ class avlTree
 
         void rotateRL(avlNode* &p);
 
+        void deleteNode(int data, avlNode* &p);
+
+
+
 
     public:
         avlTree();
@@ -53,7 +57,7 @@ class avlTree
         void insert(int data);
 
         bool search(int data);
-        
+
         void deleteNode(int data);
         
         int getSize();

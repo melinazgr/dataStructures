@@ -99,7 +99,7 @@ avlNode* avlTree::search(int data, avlNode* p)
     }
 }
 
-void avlTree::deleteNode(int data)
+/*void avlTree::deleteNode(int data)
 {
     avlNode* p = search(data, root);
     
@@ -135,6 +135,7 @@ void avlTree::deleteNode(int data)
         p->left = temp->left;
         p->right = temp->right;
 
+        p->height--;
         delete temp;
     }
 
@@ -147,6 +148,7 @@ void avlTree::deleteNode(int data)
         p->left = temp->left;
         p->right = temp->right;
 
+        p->height--;
         delete temp;
     }
 
@@ -154,7 +156,7 @@ void avlTree::deleteNode(int data)
     {
         avlNode* temp = root;
         
-        while(temp->left != p || temp->right != p)
+        while(temp->left != p && temp->right != p)
         {
             if(temp->data > p->data )
             {
@@ -167,17 +169,86 @@ void avlTree::deleteNode(int data)
             }
         }
 
-        if(temp->right)
+        if(temp->right == p)
         {
             temp->right = nullptr;
         }
 
-        else if(temp->left)
+        else if(temp->left == p)
         {
             temp->left = nullptr;
         }
         
+        delete p;
         p = temp;
+
+        p->height--;
+    }
+    
+    
+    balance(p);
+}*/
+
+void avlTree::deleteNode(int data)
+{
+    deleteNode(data, root);
+}
+
+void avlTree::deleteNode(int data, avlNode* &p)
+{
+    if(!p)
+    {
+        return;
+    }
+
+    // go left
+    if(p->data > data)
+    {
+        deleteNode(data, p->left);
+    }
+
+    // go right
+    else if(p->data < data)
+    {
+        deleteNode(data, p->right);
+    }
+
+    else if(p->left && p->right)
+    {
+        avlNode* n = findMin(p);
+        p->data = n->data;
+        
+        avlNode* temp = p;
+        
+        // delete node n
+        while(temp->left != n)
+        {
+            temp = temp->left;
+        }
+
+        temp->left = nullptr;
+        
+        delete n;
+    }
+
+    else if(p->left)
+    {
+        avlNode* temp = p;
+        p = p->left;
+        delete temp;
+    }
+
+    else if(p->right)
+    { 
+        avlNode* temp = p;
+        p = p->right;
+        delete temp;
+    }
+
+    else
+    {
+        avlNode* temp = p;
+        p = nullptr;
         delete temp;
     }
     
@@ -212,7 +283,7 @@ int avlTree::findMin()
 //
 //            O
 //          O   O
-//            O *
+//            O 
 //
 void avlTree::rotateLL(avlNode* &a)
 {
