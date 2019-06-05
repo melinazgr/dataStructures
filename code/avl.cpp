@@ -252,6 +252,8 @@ void avlTree::deleteNode(int data, avlNode* &p)
         delete temp;
     }
     
+    size--;
+    
     balance(p);
 }
 
