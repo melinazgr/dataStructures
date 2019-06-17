@@ -1,67 +1,77 @@
 #include "graph.h"
 
+
 graph::graph()
 {
     size = 0;
-    capacity = 100;
-    adjList = new linkedList [capacity];
+}
+
+int graph::getVertexIndex(int key)
+{
+    map<int, int>::iterator itKey;
+
+    itKey = keys.find(key);
+
+    if(itKey != keys.end())
+    {
+        return itKey->second;
+    }
+    else
+    {
+        return -1;
+    }
+}
+
+int graph::insertVertex(int key)
+{
+    vertexAdjList newList;
+    keys.insert(std::pair<int, int>(key, size));
+    vertices.push_back(newList);
+    return size++;
 }
 
 void graph::insertEdge(int x, int y)
-{   
-    map<int, int>::iterator itX;
-    map<int, int>::iterator itY;
-
-    itX = keys.find(x);
-    itY = keys.find(y);
-
-    if(itX == keys.end())
+{  
+    int idxX = getVertexIndex(x);
+    if(idxX == -1)
     {
-        keys.insert(pair<int, int>(size, x));
-        size++;
-    }
-    
-    if(itY == keys.end())
-    {
-        keys.insert(pair<int, int>(size, y));
-        size++;
+        idxX = insertVertex(x);
     }
 
-    adjList[itX->first].insert(y);
-    adjList[itY->first].insert(x);
+    int idxY = getVertexIndex(y);
+    if(idxY == -1)
+    {
+        idxY = insertVertex(y);
+    }
+
+    vertices[idxX].push_back(idxY);
+    vertices[idxY].push_back(idxX);
 }
 
 void graph::deleteEdge(int x, int y)
 {   
-    map<int, int>::iterator itX;
-    map<int, int>::iterator itY;
+    int idxX = getVertexIndex(x);
+    int idxY = getVertexIndex(y);
 
-    itX = keys.find(x);
-    itY = keys.find(y);
-    
-    if(itX == keys.end() || adjList[itX->first].search(x) == false ||
-       itY == keys.end() || adjList[itY->first].search(x) == false)
+    if(idxX == -1 || idxY == -1)
     {
         return;
     }
 
-    else
-    {
-        adjList[itX->first].deleteNode(y);
-        adjList[itY->first].deleteNode(x);
-    }
+    vertexAdjList::iterator itX;
+    vertexAdjList::iterator itY;
     
-    int sizeX = adjList[itX->first].getSize();
-    int sizeY = adjList[itY->first].getSize();
-
-    if(sizeX == 0)
-    {
-        size--;
+    itX = std::find(vertices[idxX].begin(), vertices[idxX].end(), idxY);
+    itY = std::find(vertices[idxY].begin(), vertices[idxY].end(), idxX);
+    
+    if(itX != vertices[idxX].end())
+    {   
+        vertices[idxX].erase(itX);
     }
 
-    if(sizeY == 0)
-    {
-        size--;
+    if(itY != vertices[idxY].end())
+    {   
+        vertices[idxY].erase(itY);
     }
 }
 
@@ -70,34 +80,25 @@ int graph::getSize()
     return size;
 }
 
-void graph::dfs(int v, bool *visited)
-{
-    // mark the current vertex as visited
-    visited[v] = true; // v = it->first
+void graph::dfs(vector<bool> &visited, int v)
+{   
+    visited[v] = true;
 
-    map<int, int>::iterator itD;
+    vertexAdjList::iterator itV;
 
-    node* d = adjList[v].begin();
-
-    while(adjList[v].traverse(d))
-    {   
-        itD = keys.find(d->data);
-
-        if(!visited[itD->first])
+    for(itV = vertices[v].begin(); itV != vertices[v].end(); itV++)
+    {
+        if(!visited[*itV])
         {
-            dfs(itD->first, visited);
+            dfs(visited, (*itV));
         }
     }
 }
 
 int graph::connectedComponents()
 {
-    bool *visited = new bool[size];
-
-    for(int i = 0; i < size; i++) 
-    {
-        visited[i] = false; 
-    }
+    // mark the current vertex as visited
+    vector <bool> visited(size, false);
 
     int count = 0;
 
@@ -105,10 +106,37 @@ int graph::connectedComponents()
     {
         if(visited[i] == false)
         {
-            dfs(i, visited);
+            dfs(visited, i);
             count++;
         }
     }
     
     return count;
 }
+
+// output the format of graph based on  
+// http://www.webgraphviz.com/
+void graph::print(ofstream &output)
+{   
+    output << "Digraph G {" << endl << endl;
+    for(int i = 0; i < size; i++)
+    {
+        for(vertexAdjList::iterator itV = vertices[i].begin(); itV != vertices[i].end(); itV++)
+        {
+            
+           output <<  i << " -> " << (*itV) << endl;
+        }
+    }
+
+    output << endl << "}" << endl;
+}
+
+void graph::print(const string &filename)
+{
+    ofstream output;
+    output.open(filename);
+
+    print(output);
+    output.close();
+}
+
