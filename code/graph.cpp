@@ -1,6 +1,5 @@
 #include "graph.h"
-
-
+ 
 graph::graph()
 {
     size = 0;
@@ -80,7 +79,7 @@ int graph::getSize()
     return size;
 }
 
-void graph::dfs(vector<bool> &visited, int v)
+void graph::dfsInternal(vector<bool> &visited, int v)
 {   
     visited[v] = true;
 
@@ -90,9 +89,28 @@ void graph::dfs(vector<bool> &visited, int v)
     {
         if(!visited[*itV])
         {
-            dfs(visited, (*itV));
+            dfsInternal(visited, (*itV));
         }
     }
+}
+
+
+int graph::dfs(vector<bool> &visited, int v, int &count)
+{   
+    visited[v] = true;
+
+    vertexAdjList::iterator itV;
+
+    for(itV = vertices[v].begin(); itV != vertices[v].end(); itV++)
+    {
+        if(!visited[*itV])
+        {   
+            count++;
+            dfs(visited, (*itV), count);
+        }
+    }
+    
+    return count;
 }
 
 int graph::connectedComponents()
@@ -106,12 +124,57 @@ int graph::connectedComponents()
     {
         if(visited[i] == false)
         {
-            dfs(visited, i);
+            dfsInternal(visited, i);
             count++;
         }
     }
     
     return count;
+}
+
+/* vector<int> graph::prim(vector<bool> &visited, int v)
+{
+    visited[v] = true;
+
+    vector <int> keys(size, 0);
+    
+    vertexAdjList::iterator itV;
+
+    for(itV = vertices[v].begin(); itV != vertices[v].end(); itV++)
+    {
+        if(!visited[*itV])
+        {   
+            keys.push_back();
+            dfsInternal(visited, (*itV));
+        }
+    }
+}*/
+
+int graph::spanningTree()
+{
+    vector <bool> visited(size, false);
+
+    int count = 0;
+
+    for(int i = 0; i < size; i++)
+    {
+        if(visited[i] == false)
+        {
+            
+            dfs(visited, i, count);
+        }
+    }
+
+    vertexAdjList::iterator itV = vertices[0].begin();
+
+    int mst = dfs(visited, (*itV), count);
+
+    if(mst < size - 1)
+    {
+        return -1;
+    }
+    
+    return mst;
 }
 
 // output the format of graph based on  
@@ -139,4 +202,3 @@ void graph::print(const string &filename)
     print(output);
     output.close();
 }
-

@@ -5,6 +5,7 @@
 #include <map> 
 #include <vector>
 #include <string>
+#include <queue> 
 
 using namespace std;
 
@@ -29,7 +30,12 @@ class graph
         // assumes the key is not already inserted
         int insertVertex(int key);
 
-        void dfs(vector<bool> &visited, int v);
+        void dfsInternal(vector<bool> &visited, int v);
+
+        int dfs(vector<bool> &visited, int v, int &count);
+
+
+        vector<int>  prim(vector<bool> &visited, int v);
 
     public:
         graph();
@@ -46,8 +52,9 @@ class graph
         // returns the number of the connected components
         int connectedComponents();
 
+        int spanningTree();
+
         void print(ofstream &output);
 
         void print(const string &filename);
 };
-

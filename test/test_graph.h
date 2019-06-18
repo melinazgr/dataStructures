@@ -51,6 +51,8 @@ TEST_F(graphTest, graphInsert2)
 
     EXPECT_EQ(gr.getSize(), 5);
     EXPECT_EQ(gr.connectedComponents(), 1);
+    EXPECT_EQ(gr.spanningTree(), 4);
+
 
     gr.deleteEdge(101,102);
     gr.deleteEdge(102,103);
@@ -58,6 +60,7 @@ TEST_F(graphTest, graphInsert2)
     gr.print("graphInsert5b.txt");
 
     EXPECT_EQ(gr.connectedComponents(), 2);
+    EXPECT_EQ(gr.spanningTree(), 3);
     
 
 }
