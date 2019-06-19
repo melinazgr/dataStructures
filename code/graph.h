@@ -9,7 +9,20 @@
 
 using namespace std;
 
-typedef vector <int> vertexAdjList;
+struct edge
+{
+    int to;
+    int weight;
+
+    edge(int to, int weight):to(to),weight(weight){}
+};
+
+bool operator == (const edge &e, const int &val)
+{
+    return e.to == val;
+}
+
+typedef vector <edge> vertexAdjList;
 
 // uses an adjacency list to represent the graph
 // since every vertex can be a random integer number
@@ -32,10 +45,20 @@ class graph
 
         void dfsInternal(vector<bool> &visited, int v);
 
-        int dfs(vector<bool> &visited, int v, int &count);
+        int dfsCount(vector<bool> &visited, int v, int &count);
 
+        void bfs(int v);
 
-        vector<int>  prim(vector<bool> &visited, int v);
+        int bfsPath(int a, int b);
+
+        int minDist(vector<int> dist, vector<bool> visited);
+
+        int minVal(vector<int> queue);
+
+        int prim(int v);
+
+        int dijkstra(int a, int b);
+
 
     public:
         graph();
@@ -52,7 +75,11 @@ class graph
         // returns the number of the connected components
         int connectedComponents();
 
-        int spanningTree();
+        int spanningTreeDfs();
+
+        int spanningTreePrim();
+        
+        int shortestPath(int a, int b);
 
         void print(ofstream &output);
 
