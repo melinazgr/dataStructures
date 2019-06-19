@@ -9,6 +9,9 @@ class hashTable
         int capacity; // size of bucket array
         int size; // size of hash table
 
+        // returns the load factor of the hash table
+        double getLoadFactor();
+
     public:
         // constructors
         hashTable():hashTable(101){}
@@ -29,7 +32,4 @@ class hashTable
         // returns  true if an integer is found
         //          alse otherwise
         bool search(int x);
-
-        // returns the load factor of the hash table
-        double getLoadFactor();
 };

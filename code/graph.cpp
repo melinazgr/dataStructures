@@ -188,7 +188,7 @@ int graph::minVal(vector<int> dist)
     
     for(vector<int>::iterator itI = dist.begin(); itI != dist.end(); itI++)
     {
-        if(dist[itI] < min)
+        if(dist[*itI] < min)
         {
             min = dist[*itI];
         }
