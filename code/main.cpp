@@ -23,6 +23,8 @@ int main()
     avlTree avl;
     Graph graph;
 
+    vector<int> empty;
+
     ifstream commands;
     commands.open("commands.txt");
     
@@ -99,7 +101,7 @@ int main()
                     graphDriver graphBuilder(graph);
                     graphBuilder.readPair(arg3);
 
-                    output::outputGraph(output::CMD_BUILD, 0, 0, output, timer.elapsed());
+                    output::outputGraph(output::CMD_BUILD, 0, 0, empty, output, timer.elapsed());
                 }
             }
 
@@ -144,7 +146,7 @@ int main()
                     int b = stoi(arg4);
                     graph.insert(a, b);
 
-                    output::outputGraph(output::CMD_INSERT, a, b, output, timer.elapsed());  
+                    output::outputGraph(output::CMD_INSERT, a, b, empty, output, timer.elapsed());  
                 }
             }
 
@@ -179,7 +181,7 @@ int main()
                 {
                     int data = graph.getSize();
 
-                    output::outputGraph(output::CMD_GETSIZE, data, 0, output, timer.elapsed());
+                    output::outputGraph(output::CMD_GETSIZE, data, 0, empty, output, timer.elapsed());
                 }
             }
 
@@ -236,7 +238,7 @@ int main()
 
                     graph.deleteEdge(a,b);
 
-                    output::outputGraph(output::CMD_DELETE, a, b, output, timer.elapsed());
+                    output::outputGraph(output::CMD_DELETE, a, b, empty, output, timer.elapsed());
                 }
             }
 
@@ -268,15 +270,16 @@ int main()
 
                 int data = graph.shortestPath(a,b);
 
-                output::outputGraph(output::CMD_COMPUTESHORTESTPATH, data, 0, output, timer.elapsed());
+                output::outputGraph(output::CMD_COMPUTESHORTESTPATH, data, 0, empty, output, timer.elapsed());
             }
 
             // COMPUTESPANNINGTREE command
             else if (arg1 == output::CMD_COMPUTESPANNINGTREE)
             {
-                int data = graph.spanningTree();
+                vector<int> data;
+                graph.spanningTree(data);
 
-                output::outputGraph(output::CMD_COMPUTESPANNINGTREE, data, 0, output, timer.elapsed());
+                output::outputGraph(output::CMD_COMPUTESPANNINGTREE, 0, 0, data, output, timer.elapsed());
             }
             
             // FINDCONNECTEDCOMPONENTS command
@@ -284,7 +287,7 @@ int main()
             {
                 int data = graph.connectedComponents();
 
-                output::outputGraph(output::CMD_FINDCONNECTEDCOMPONENTS, data, 0, output, timer.elapsed());
+                output::outputGraph(output::CMD_FINDCONNECTEDCOMPONENTS, data, 0, empty, output, timer.elapsed());
             }
         }
     }

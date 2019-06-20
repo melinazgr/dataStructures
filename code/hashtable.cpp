@@ -57,25 +57,32 @@ double hashTable::getLoadFactor()
     return size / (double) capacity;
 }
 
-void hashTable::insert(int x)
+void hashTable::insert(int key, int value)
 {
-    int h = hashKey(x);
+    int h = hashKey(key);
 
-    buckets[h].insert(x);
+    buckets[h].insert(key, value);
     size++;
 }
 
 void hashTable::insert(linkedListNode* newNode)
 {
-    int h = hashKey(newNode->data);
+    int h = hashKey(newNode->key);
 
     buckets[h].insert(newNode);
     size++;
 }
 
-bool hashTable::search(int x)
+bool hashTable::search(int key)
 {
-    int h = hashKey(x);
+    int h = hashKey(key);
 
-    return buckets[h].search(x);
+    return buckets[h].search(key);
+}
+
+bool hashTable::find(int key, int &value)
+{
+    int h = hashKey(key);
+
+    return buckets[h].find(key, value);
 }

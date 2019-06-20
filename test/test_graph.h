@@ -2,6 +2,7 @@
 #include "graph.cpp"
 #include <iostream>
 #include <fstream>
+#include <vector>
 
 using namespace std;
 
@@ -37,6 +38,8 @@ TEST_F(graphTest, graphInsert5)
 {
     Graph gr;
 
+    vector<int> st; 
+
     gr.insertEdge(100, 101);
     gr.insertEdge(100, 104);
     gr.insertEdge(101, 102);
@@ -50,20 +53,29 @@ TEST_F(graphTest, graphInsert5)
 
     EXPECT_EQ(gr.getSize(), 5);
     EXPECT_EQ(gr.connectedComponents(), 1);
-    EXPECT_EQ(gr.spanningTree(), 4);
+    gr.spanningTree(st);
+
+    EXPECT_EQ(st[0], 4);
+    
     EXPECT_EQ(gr.shortestPath(100, 103), 2);
 
     gr.deleteEdge(101,102);
     gr.deleteEdge(102,103);
 
     gr.print("graphInsert5b.txt");
+    
+    st.clear();
 
-    //EXPECT_EQ(gr.connectedComponents(), 2);
+    gr.spanningTree(st);
+    EXPECT_EQ(st[0], 3);
+    EXPECT_EQ(st[1], 0);
 }
 
-TEST_F(graphTest, shortesWeight)
+TEST_F(graphTest, shortestWeight)
 {
     Graph gr;
+
+    vector<int> st; 
 
     gr.insertEdge(0, 1);
     gr.insertEdge(1, 2);
@@ -80,5 +92,7 @@ TEST_F(graphTest, shortesWeight)
     gr.print("graphWeight.txt");
 
     EXPECT_EQ(gr.shortestPath(0, 8), 3);
-    EXPECT_EQ(gr.spanningTree(), 8);
+    
+    gr.spanningTree(st);
+    EXPECT_EQ(st[0], 8);
 }

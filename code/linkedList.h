@@ -2,7 +2,8 @@
 
 struct linkedListNode
 {
-    int data;
+    int key;
+    int value;
     linkedListNode* next;
 };
 
@@ -11,6 +12,7 @@ class linkedList
     protected:
         linkedListNode* head;
         int size;
+        bool allowDuplicates;
 
     public:
         
@@ -18,6 +20,15 @@ class linkedList
         {
             head = nullptr;
             size = 0;
+            allowDuplicates = false;
+        }
+
+        linkedList(bool allowDuplicates)
+        {
+            head = nullptr;
+            size = 0;
+
+            this->allowDuplicates = allowDuplicates;
         }
         
         ~linkedList()
@@ -33,13 +44,13 @@ class linkedList
             }
         }
 
-        virtual bool search(int x)
+        virtual bool search(int key)
         {
             linkedListNode* temp = head;
 
             while (temp != nullptr)
             {   
-                if(temp->data == x)
+                if(temp->key == key)
                 {
                     return true;
                 }
@@ -49,12 +60,30 @@ class linkedList
 
             return false;
         }
+
+        virtual bool find(int key, int &value)
+        {
+            linkedListNode* temp = head;
+
+            while (temp != nullptr)
+            {   
+                if (temp->key == key)
+                {
+                    value = temp->value;
+                    return true;
+                }
+                
+                temp = temp->next;
+            }
+
+            return false;
+        }
         
-        virtual void insert(int x)
+        virtual void insert(int key, int value = 0)
         {   
-            bool found = search(x);
+            bool found = search(key);
             
-            if (found)
+            if (found && !allowDuplicates)
             {
                 return;
             }
@@ -62,8 +91,9 @@ class linkedList
             else
             {
                 linkedListNode* newNode = new linkedListNode();
-                newNode->data = x;
-                newNode->next = head ;
+                newNode->key = key;
+                newNode->value = value;
+                newNode->next = head;
                 head = newNode;
 
                 size++;

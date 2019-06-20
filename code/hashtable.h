@@ -14,7 +14,7 @@ class hashTable
 
     public:
         // constructors
-        hashTable():hashTable(101){}
+        hashTable():hashTable(1001){}
         hashTable(int capacity);
 
         // destructor
@@ -23,7 +23,7 @@ class hashTable
         int initialize(int capacity);
 
         // inserts an integer in the hash table
-        void insert(int x);
+        void insert(int key, int value = 0);
 
         // inserts a given node in hash table
         void insert(linkedListNode* newNode);
@@ -34,9 +34,11 @@ class hashTable
         int getCapacity();
 
         // returns the bucket of the key
-        int hashKey(int x) {return x % capacity;}
+        int hashKey(int key) { return key % capacity; }
         
         // returns  true if an integer is found
         //          alse otherwise
-        bool search(int x);
+        bool search(int key);
+
+        bool find(int key, int &value);
 };

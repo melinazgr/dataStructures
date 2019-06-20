@@ -1,6 +1,6 @@
 #include "graph.h"
+#include "priorityQueue.h"
 
-#include <queue> 
 #include <algorithm>
 
 bool operator == (const edge &e, const int &val)
@@ -15,13 +15,11 @@ Graph::Graph()
 
 int Graph::getVertexIndex(int key)
 {
-    map<int, int>::iterator itKey;
-
-    itKey = keys.find(key);
-
-    if(itKey != keys.end())
+    int value;
+    
+    if(vertexMap.find(key, value))
     {
-        return itKey->second;
+        return value;
     }
     else
     {
@@ -32,7 +30,7 @@ int Graph::getVertexIndex(int key)
 int Graph::insertVertex(int key)
 {
     vertexAdjList newList;
-    keys.insert(std::pair<int, int>(key, size));
+    vertexMap.insert(key, size);
     vertices.push_back(newList);
     return size++;
 }
@@ -115,6 +113,12 @@ void Graph::dfsInternal(vector<bool> &visited, int v)
 
 int Graph::connectedComponents()
 {
+    vector<int> component;
+    return connectedComponents(component);
+}
+
+int Graph::connectedComponents(vector<int> &component)
+{
     // mark the current vertex as visited
     vector <bool> visited(size, false);
 
@@ -123,7 +127,8 @@ int Graph::connectedComponents()
     for(int i = 0; i < size; i++)
     {
         if(visited[i] == false)
-        {
+        {   
+            component.push_back(i);
             dfsInternal(visited, i);
             count++;
         }
@@ -135,20 +140,19 @@ int Graph::connectedComponents()
 int Graph::prim(int v)
 {
     vector <bool> visited(size, false);
-    priority_queue <pairInt, vector <pairInt>, greater <pairInt>> q; 
-
-    pairInt p;
+    vector <int> dist(size, INT_MAX);
+    priorityQueue q;
 
     int mst = 0;
 
-    q.push(make_pair(0, v));
+    dist[v] = 0;
+    q.push(dist[v], v);
 
-    while(!q.empty())
+    while(!q.isEmpty())
     {
-        p = q.top();
+        int weight, u;
+        q.getTop(weight, u);
         q.pop();
-
-        int u = p.second;
 
         if(visited[u])
         {
@@ -156,14 +160,16 @@ int Graph::prim(int v)
         }
 
         visited[u] = true;
-        mst += p.first;
+        //cout<< "visiting: "<<u<<" weight: " << weight<<endl;
+        mst += weight;
 
         for(vertexAdjList::iterator itU = vertices[u].begin(); itU != vertices[u].end(); itU++)
         {
             int w = (*itU).to;
-            if(!visited[w])
+            if(!visited[w] && dist[w] > (*itU).weight)
             {
-                q.push(make_pair((*itU).weight, w));
+                dist[w] = (*itU).weight;
+                q.push(dist[w], w);
             }
         }
     }
@@ -171,16 +177,22 @@ int Graph::prim(int v)
     return mst;
 }
 
-int Graph::spanningTree()
+void Graph::spanningTree(vector<int> &tree)
 {
-    return prim(0);
+    vector<int> component;
+    connectedComponents(component);
+
+    for(vector<int>::iterator itC = component.begin(); itC != component.end(); itC++)
+    {
+        tree.push_back(prim(*itC));
+    }
 }
 
 int Graph::dijkstra(int x, int y)
 {
     vector <bool> visited(size, false);
     vector <int> dist(size, INT_MAX);
-    priority_queue <pairInt, vector <pairInt>, greater <pairInt>> q; 
+    priorityQueue q;
     
     pairInt p;
 
@@ -193,14 +205,13 @@ int Graph::dijkstra(int x, int y)
     }
 
     dist[a] = 0;
-    q.push(make_pair(0, a));
+    q.push(0,a);
 
-    while(!q.empty())
+    while(!q.isEmpty())
     {
-        p = q.top();
+        int weight, u;
+        q.getTop(weight, u);
         q.pop();
-
-        int u = p.second;
 
         if(visited[u])
         {
@@ -215,7 +226,7 @@ int Graph::dijkstra(int x, int y)
             if(dist[w] > dist[u] + (*itU).weight)
             {
                 dist[w] =  dist[u] + (*itU).weight;
-                q.push(make_pair(dist[w], w));
+                q.push(dist[w], w);
             }
         }
     }

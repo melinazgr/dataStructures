@@ -2,9 +2,11 @@
 
 #include <iostream> 
 #include <fstream>
-#include <map> 
 #include <vector>
 #include <string>
+
+#include "hashTable.h"
+
 
 using namespace std;
 
@@ -30,7 +32,8 @@ class Graph
         int size; // size of graph
         
         vector<vertexAdjList> vertices;
-        std::map<int, int> keys;
+        
+        hashTable vertexMap;
         
         // returns the unique index of a vertex
         //          -1 if not found
@@ -74,8 +77,10 @@ class Graph
         // returns the number of the connected components
         int connectedComponents();
 
-        int spanningTree();
-        
+        int connectedComponents(vector<int> &component);
+
+        void spanningTree(vector<int> &tree);
+
         int shortestPath(int a, int b);
 
         void print(ofstream &output);

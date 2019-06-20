@@ -8,17 +8,20 @@ class sortedLinkedList : public linkedList
 {
     
     public:
+        sortedLinkedList(){}
         
-        virtual bool search(int x)
-        {
-            linkedListNode* temp = head;  //use temp to not lose reference of the head 
+        sortedLinkedList(bool allowDuplicates):linkedList(allowDuplicates){}
 
-            while (temp && (x > temp->data))
+        virtual bool search(int key)
+        {
+            linkedListNode* temp = head;
+
+            while (temp && (key > temp->key))
             {
                 temp = temp->next;
             }
 
-            if (temp && (x == temp->data))
+            if (temp && (key == temp->key))
             {
                 return true;                
             }
@@ -26,24 +29,43 @@ class sortedLinkedList : public linkedList
             return false;
         }
 
-        virtual void insert(int x)
+        virtual bool find(int key, int &value)
+        {
+            linkedListNode* temp = head;
+
+            while (temp && (key > temp->key))
+            {
+                temp = temp->next;
+            }
+
+            if (temp && (key == temp->key))
+            {
+                value = temp->value;
+                return true;                
+            }
+
+            return false;
+        }
+
+        virtual void insert(int key, int value = 0)
         {
             linkedListNode* p = head;
             linkedListNode* prevP = nullptr;
 
-            while (p && p->data < x)
+            while (p && p->key < key)
             {  
                 prevP = p; 
                 p = p->next;
             }   
 
-            if (p && p->data == x)
+            if (p && p->key == key && !allowDuplicates)
             {
                 return;
             }
 
             linkedListNode* newNode = new linkedListNode();
-            newNode->data = x;
+            newNode->key = key;
+            newNode->value = value;
             newNode->next = p;
 
             if (prevP)
@@ -63,16 +85,17 @@ class sortedLinkedList : public linkedList
         {
             linkedListNode* p = head;
             linkedListNode* prevP = nullptr;
-            int x = newNode->data;
+            int key = newNode->key;
 
-            while (p && p->data < x)
+            while (p && p->key < key)
             {  
                 prevP = p; 
                 p = p->next;
             }   
 
-            if (p && p->data == x)
+            if (p && p->key == key && !allowDuplicates)
             {
+                delete newNode;
                 return;
             }
 
@@ -90,4 +113,21 @@ class sortedLinkedList : public linkedList
 
             size++;
         }
+
+        linkedListNode* getHead()
+        {
+            return head;
+        }
+
+        void deleteHead()
+        {
+            linkedListNode* temp = head;
+
+            if(head)
+            {
+                head = head->next;
+                delete temp;
+            }
+        }
+
 };

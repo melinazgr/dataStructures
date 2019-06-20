@@ -1,9 +1,7 @@
+#include <iostream>
+
 #include "avl.h"
 
-#include <iostream>
-#include <limits>
-#include <cstdint>
-#include <algorithm>
 using namespace std;
 
 avlTree::avlTree()
@@ -99,96 +97,6 @@ avlNode* avlTree::search(int data, avlNode* p)
     }
 }
 
-/*void avlTree::deleteNode(int data)
-{
-    avlNode* p = search(data, root);
-    
-    if(!p)
-    {
-        return;
-    }
-
-    if(p->left && p->right)
-    {
-        avlNode* n = findMin(p);
-        p->data = n->data;
-
-        avlNode* temp = p;
-        
-        // delete node n
-        while(temp->left != n)
-        {
-            temp = temp->left;
-        }
-
-        temp->left = nullptr;
-        
-        delete n;
-    }
-
-    else if(p->left)
-    {
-        p->data = p->left->data;
-
-        avlNode* temp = p->left;
-
-        p->left = temp->left;
-        p->right = temp->right;
-
-        p->height--;
-        delete temp;
-    }
-
-    else if(p->right)
-    { 
-        p->data = p->right->data;
-
-        avlNode* temp = p->right;
-
-        p->left = temp->left;
-        p->right = temp->right;
-
-        p->height--;
-        delete temp;
-    }
-
-    else
-    {
-        avlNode* temp = root;
-        
-        while(temp->left != p && temp->right != p)
-        {
-            if(temp->data > p->data )
-            {
-                temp = temp->left;
-            }
-
-            else if(temp->data < p->data)
-            {
-                temp = temp->right;
-            }
-        }
-
-        if(temp->right == p)
-        {
-            temp->right = nullptr;
-        }
-
-        else if(temp->left == p)
-        {
-            temp->left = nullptr;
-        }
-        
-        delete p;
-        p = temp;
-
-        p->height--;
-    }
-    
-    
-    balance(p);
-}*/
-
 void avlTree::deleteNode(int data)
 {
     deleteNode(data, root);
@@ -278,15 +186,7 @@ int avlTree::findMin()
     avlNode* min = findMin(root);
     return min->data;
 }
-
-//
-// https://www.hackerrank.com/challenges/self-balancing-tree/problem
-// https://www.tutorialspoint.com/data_structures_algorithms/avl_tree_algorithm.htm
-//
-//            O
-//          O   O
-//            O 
-//
+ 
 void avlTree::rotateLL(avlNode* &a)
 {
     if(a->left)
@@ -314,7 +214,6 @@ void avlTree::rotateLL(avlNode* &a)
 
         a = b;
     }
-    
 }
 
 void avlTree::rotateLR(avlNode* &a)
@@ -349,7 +248,6 @@ void avlTree::rotateRR(avlNode* &a)
         b->height = max(height(b->left), height(b->right)) + 1;
 
         a = b;
-
     }
 }
 

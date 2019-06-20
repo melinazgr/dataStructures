@@ -2,6 +2,7 @@
 
 #include <string> 
 #include <fstream>
+#include <vector>
 
 using namespace std;
 
@@ -33,6 +34,6 @@ class output
 
         static void outputAvl(string command, int data, bool result, ofstream &output, double time);
 
-        static void outputGraph(string command, int data1, int data2, ofstream &output, double time);
+        static void outputGraph(string command, int data1, int data2, vector<int> data, ofstream &output, double time);
 
 };

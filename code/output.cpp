@@ -115,7 +115,7 @@ void output::outputAvl(string command, int data, bool result, ofstream &output, 
     output << "|| TIME : " << setprecision(10) << time << endl;
 }
 
-void output::outputGraph(string command, int data1, int data2, ofstream &output, double time)
+void output::outputGraph(string command, int data1, int data2, vector<int> data, ofstream &output, double time)
 {
     if (command == CMD_BUILD)
     {
@@ -127,10 +127,17 @@ void output::outputGraph(string command, int data1, int data2, ofstream &output,
         output << command << " " << CMD_GRAPH << " " << data1 << " - " << data2;
     }
 
-    else if (command == CMD_GETSIZE || command == CMD_COMPUTESPANNINGTREE || 
-             command == CMD_COMPUTESHORTESTPATH || command == CMD_FINDCONNECTEDCOMPONENTS)
+    else if (command == CMD_GETSIZE || command == CMD_COMPUTESHORTESTPATH || command == CMD_FINDCONNECTEDCOMPONENTS)
     {
-        output << command << " " << CMD_AVLTREE << " : " << data;
+        output << command << " " << CMD_AVLTREE << " : " << data1;
+    }
+
+    else if (command == CMD_COMPUTESPANNINGTREE)
+    {
+        for(vector<int>::iterator itD = data.begin(); itD != data.end(); itD++)
+        {
+            output << (*itD) << " ";
+        }
     }
 
     output << "|| TIME : " << setprecision(10) << time << endl;

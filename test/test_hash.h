@@ -11,7 +11,7 @@ class hastableTest : public ::testing::Test
         ~hastableTest() override{}
 };
 
-TEST_F(hastableTest, hashInsert)
+TEST_F(hastableTest, hashInsert10)
 {
     hashTable hash;
 
