@@ -89,6 +89,7 @@ int main()
                 {   
                     hashDriver hashTableBuilder(hash);
                     hashTableBuilder.readSingle(arg3);
+                    
 
                     output::outputHash(output::CMD_BUILD, 0, false, output, timer.elapsed());  
                 }

@@ -1,5 +1,6 @@
 #include "gtest/gtest.h"
 #include "hashTable.cpp"
+#include "driver.h"
 
 using namespace std;
 
@@ -34,3 +35,23 @@ TEST_F(hastableTest, hashInsert)
     EXPECT_EQ(hash.getSize(), 11);
     EXPECT_EQ(hash.search(101), true);
 }
+
+TEST_F(hastableTest, testDriver)
+{
+    hashTable hash;
+
+    hashDriver hashTableBuilder(hash);
+    hashTableBuilder.readSingle("..\\testfiles\\1K.txt");
+
+    cout<<"capacity: "<< hash.getCapacity() <<endl;;
+
+    EXPECT_EQ(hash.getSize(), 1000);
+
+    EXPECT_EQ(hash.search(1000000), false);
+    EXPECT_EQ(hash.search(998), true);
+
+    hash.insert(101);
+    EXPECT_EQ(hash.getSize(), 1001);
+    EXPECT_EQ(hash.search(101), true);
+}
+

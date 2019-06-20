@@ -32,6 +32,8 @@ class driver
                 data >> n;
                 insert(n);
             }
+
+            build();
         }
 
         // reads from a file with two numbers on each line
@@ -53,7 +55,11 @@ class driver
                 data >> a >> b;
                 insert(a,b);
             }
+
+            build();
         }
+
+        virtual void build(){};
 };
 
 class minHeapDriver : public driver
@@ -99,11 +105,28 @@ class hashDriver : public driver
 {
     private:
         hashTable &hash;
+        linkedList list;
+
     public: 
         hashDriver(hashTable &_hash):hash(_hash){}
 
         void insert(int x, int y)
         {
-            hash.insert(x);
+            list.insert(x);
+        }
+
+        virtual void build()
+        {
+            int size = list.getSize();
+            linkedListNode* head = list.replaceHead(nullptr);
+
+            hash.initialize(size);
+
+            for(linkedListNode* p = head; p;)
+            {
+                linkedListNode* temp = p->next;
+                hash.insert(p);
+                p = temp;
+            }
         }
 };

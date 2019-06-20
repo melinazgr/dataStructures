@@ -20,11 +20,18 @@ class hashTable
         // destructor
         ~hashTable();
 
+        int initialize(int capacity);
+
         // inserts an integer in the hash table
         void insert(int x);
 
+        // inserts a given node in hash table
+        void insert(linkedListNode* newNode);
+
         // returns the size of the hash table
         int getSize();
+
+        int getCapacity();
 
         // returns the bucket of the key
         int hashKey(int x) {return x % capacity;}

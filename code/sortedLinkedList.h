@@ -1,40 +1,15 @@
 #pragma once 
 
 #include <iostream>
+#include "linkedList.h"
 
-using namespace std;
 
-struct linkedListNode
+class sortedLinkedList : public linkedList
 {
-    int data;
-    linkedListNode* next;
-};
-
-class sortedLinkedList
-{
-    private:
-        linkedListNode* head;
-
+    
     public:
-        sortedLinkedList()
-        {
-            head = nullptr;
-        }
-
-        ~sortedLinkedList()
-        {
-            linkedListNode* temp = head;  //use temp to not lose reference of the head 
-            linkedListNode* prev;
-
-            while (temp != nullptr)
-            {
-                prev = temp;
-                temp = temp->next;
-                delete prev;
-            }
-        }
-
-        bool search(int x)
+        
+        virtual bool search(int x)
         {
             linkedListNode* temp = head;  //use temp to not lose reference of the head 
 
@@ -51,7 +26,7 @@ class sortedLinkedList
             return false;
         }
 
-        void insert(int x)
+        virtual void insert(int x)
         {
             linkedListNode* p = head;
             linkedListNode* prevP = nullptr;
@@ -80,5 +55,39 @@ class sortedLinkedList
             {
                 head = newNode;
             }
+
+            size++;
+        }
+
+        void insert(linkedListNode* newNode)
+        {
+            linkedListNode* p = head;
+            linkedListNode* prevP = nullptr;
+            int x = newNode->data;
+
+            while (p && p->data < x)
+            {  
+                prevP = p; 
+                p = p->next;
+            }   
+
+            if (p && p->data == x)
+            {
+                return;
+            }
+
+            newNode->next = p;
+
+            if (prevP)
+            {
+                prevP->next = newNode;
+            }
+
+            else
+            {
+                head = newNode;
+            }
+
+            size++;
         }
 };
