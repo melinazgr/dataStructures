@@ -130,3 +130,16 @@ class hashDriver : public driver
             }
         }
 };
+
+class graphDriver : public driver
+{
+    private:
+        Graph &graph;
+    public: 
+        graphDriver(Graph &_graph):graph(_graph){}
+
+        void insert(int x, int y)
+        {
+            graph.insert(x, y);
+        }
+};

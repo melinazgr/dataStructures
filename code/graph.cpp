@@ -8,12 +8,12 @@ bool operator == (const edge &e, const int &val)
     return e.to == val;
 }
 
-graph::graph()
+Graph::Graph()
 {
     size = 0;
 }
 
-int graph::getVertexIndex(int key)
+int Graph::getVertexIndex(int key)
 {
     map<int, int>::iterator itKey;
 
@@ -29,7 +29,7 @@ int graph::getVertexIndex(int key)
     }
 }
 
-int graph::insertVertex(int key)
+int Graph::insertVertex(int key)
 {
     vertexAdjList newList;
     keys.insert(std::pair<int, int>(key, size));
@@ -37,7 +37,7 @@ int graph::insertVertex(int key)
     return size++;
 }
 
-void graph::insertEdge(int x, int y, int weight)
+void Graph::insertEdge(int x, int y, int weight)
 {  
     int idxX = getVertexIndex(x);
     if(idxX == -1)
@@ -61,7 +61,12 @@ void graph::insertEdge(int x, int y, int weight)
     }
 }
 
-void graph::deleteEdge(int x, int y)
+void Graph::insert(int x, int y)
+{
+    insertEdge(x,y);
+}
+
+void Graph::deleteEdge(int x, int y)
 {   
     int idxX = getVertexIndex(x);
     int idxY = getVertexIndex(y);
@@ -88,12 +93,12 @@ void graph::deleteEdge(int x, int y)
     }
 }
 
-int graph::getSize()
+int Graph::getSize()
 {
     return size;
 }
 
-void graph::dfsInternal(vector<bool> &visited, int v)
+void Graph::dfsInternal(vector<bool> &visited, int v)
 {   
     visited[v] = true;
 
@@ -108,7 +113,7 @@ void graph::dfsInternal(vector<bool> &visited, int v)
     }
 }
 
-int graph::connectedComponents()
+int Graph::connectedComponents()
 {
     // mark the current vertex as visited
     vector <bool> visited(size, false);
@@ -127,7 +132,7 @@ int graph::connectedComponents()
     return count;
 }
 
-int graph::prim(int v)
+int Graph::prim(int v)
 {
     vector <bool> visited(size, false);
     priority_queue <pairInt, vector <pairInt>, greater <pairInt>> q; 
@@ -166,12 +171,12 @@ int graph::prim(int v)
     return mst;
 }
 
-int graph::spanningTreePrim()
+int Graph::spanningTree()
 {
     return prim(0);
 }
 
-int graph::dijkstra(int x, int y)
+int Graph::dijkstra(int x, int y)
 {
     vector <bool> visited(size, false);
     vector <int> dist(size, INT_MAX);
@@ -218,14 +223,14 @@ int graph::dijkstra(int x, int y)
     return dist[b];
 }
 
-int graph::shortestPath(int a, int b)
+int Graph::shortestPath(int a, int b)
 {
     return dijkstra(a,b);
 }
 
 // output the format of graph based on  
 // http://www.webgraphviz.com/
-void graph::print(ofstream &output)
+void Graph::print(ofstream &output)
 {   
     output << "Digraph G {" << endl << endl;
     for(int i = 0; i < size; i++)
@@ -239,7 +244,7 @@ void graph::print(ofstream &output)
     output << endl << "}" << endl;
 }
 
-void graph::print(const string &filename)
+void Graph::print(const string &filename)
 {
     ofstream output;
     output.open(filename);

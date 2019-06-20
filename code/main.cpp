@@ -21,6 +21,7 @@ int main()
     maxHeap maxheap; 
     hashTable hash;
     avlTree avl;
+    Graph graph;
 
     ifstream commands;
     commands.open("commands.txt");
@@ -89,13 +90,16 @@ int main()
                 {   
                     hashDriver hashTableBuilder(hash);
                     hashTableBuilder.readSingle(arg3);
-                    
 
                     output::outputHash(output::CMD_BUILD, 0, false, output, timer.elapsed());  
                 }
 
                 else if (arg2 == output::CMD_GRAPH)
                 {
+                    graphDriver graphBuilder(graph);
+                    graphBuilder.readPair(arg3);
+
+                    output::outputGraph(output::CMD_BUILD, 0, 0, output, timer.elapsed());
                 }
             }
 
@@ -135,7 +139,12 @@ int main()
                 }
 
                 else if (arg2 == output::CMD_GRAPH)
-                {
+                {   
+                    int a = stoi(arg3);
+                    int b = stoi(arg4);
+                    graph.insert(a, b);
+
+                    output::outputGraph(output::CMD_INSERT, a, b, output, timer.elapsed());  
                 }
             }
 
@@ -168,6 +177,9 @@ int main()
 
                 else if (arg2 == output::CMD_GRAPH)
                 {
+                    int data = graph.getSize();
+
+                    output::outputGraph(output::CMD_GETSIZE, data, 0, output, timer.elapsed());
                 }
             }
 
@@ -188,6 +200,9 @@ int main()
 
                 else if (arg2 == output::CMD_AVLTREE)
                 {
+                    int min = avl.findMin();
+
+                    output::outputAvl(output::CMD_FINDMIN, min, false, output, timer.elapsed());
                 }
             }
 
@@ -211,11 +226,17 @@ int main()
                     int data = stoi(arg3);
                     avl.deleteNode(data);
 
-                    output::outputAvl(output::CMD_DELETE, data, false, output, timer.elapsed());
+                    output::outputAvl(output::CMD_DELETE, 0, false, output, timer.elapsed());
                 }
 
                 else if (arg2 == output::CMD_GRAPH)
                 {
+                    int a = stoi(arg3);
+                    int b = stoi(arg4);
+
+                    graph.deleteEdge(a,b);
+
+                    output::outputGraph(output::CMD_DELETE, a, b, output, timer.elapsed());
                 }
             }
 
@@ -242,16 +263,28 @@ int main()
             // COMPUTESHORTESTPATH command
             else if (arg1 == output::CMD_COMPUTESHORTESTPATH)
             {
+                int a = stoi(arg3);
+                int b = stoi(arg4);
+
+                int data = graph.shortestPath(a,b);
+
+                output::outputGraph(output::CMD_COMPUTESHORTESTPATH, data, 0, output, timer.elapsed());
             }
 
             // COMPUTESPANNINGTREE command
             else if (arg1 == output::CMD_COMPUTESPANNINGTREE)
             {
+                int data = graph.spanningTree();
+
+                output::outputGraph(output::CMD_COMPUTESPANNINGTREE, data, 0, output, timer.elapsed());
             }
             
             // FINDCONNECTEDCOMPONENTS command
             else if (arg1 == output::CMD_FINDCONNECTEDCOMPONENTS)
             {
+                int data = graph.connectedComponents();
+
+                output::outputGraph(output::CMD_FINDCONNECTEDCOMPONENTS, data, 0, output, timer.elapsed());
             }
         }
     }

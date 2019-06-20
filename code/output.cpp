@@ -114,3 +114,24 @@ void output::outputAvl(string command, int data, bool result, ofstream &output, 
 
     output << "|| TIME : " << setprecision(10) << time << endl;
 }
+
+void output::outputGraph(string command, int data1, int data2, ofstream &output, double time)
+{
+    if (command == CMD_BUILD)
+    {
+        output << command << " " << CMD_GRAPH;
+    }
+    
+    else if (command == CMD_INSERT || command == CMD_DELETE)
+    {
+        output << command << " " << CMD_GRAPH << " " << data1 << " - " << data2;
+    }
+
+    else if (command == CMD_GETSIZE || command == CMD_COMPUTESPANNINGTREE || 
+             command == CMD_COMPUTESHORTESTPATH || command == CMD_FINDCONNECTEDCOMPONENTS)
+    {
+        output << command << " " << CMD_AVLTREE << " : " << data;
+    }
+
+    output << "|| TIME : " << setprecision(10) << time << endl;
+}

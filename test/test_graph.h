@@ -14,7 +14,7 @@ class graphTest : public ::testing::Test
 
 TEST_F(graphTest, graphInsert2)
 {
-    graph gr;
+    Graph gr;
 
     gr.insertEdge(100, 100);
     EXPECT_EQ(gr.getSize(), 1);
@@ -35,7 +35,7 @@ TEST_F(graphTest, graphInsert2)
 
 TEST_F(graphTest, graphInsert5)
 {
-    graph gr;
+    Graph gr;
 
     gr.insertEdge(100, 101);
     gr.insertEdge(100, 104);
@@ -50,7 +50,7 @@ TEST_F(graphTest, graphInsert5)
 
     EXPECT_EQ(gr.getSize(), 5);
     EXPECT_EQ(gr.connectedComponents(), 1);
-    EXPECT_EQ(gr.spanningTreePrim(), 4);
+    EXPECT_EQ(gr.spanningTree(), 4);
     EXPECT_EQ(gr.shortestPath(100, 103), 2);
 
     gr.deleteEdge(101,102);
@@ -63,7 +63,7 @@ TEST_F(graphTest, graphInsert5)
 
 TEST_F(graphTest, shortesWeight)
 {
-    graph gr;
+    Graph gr;
 
     gr.insertEdge(0, 1);
     gr.insertEdge(1, 2);
@@ -80,5 +80,5 @@ TEST_F(graphTest, shortesWeight)
     gr.print("graphWeight.txt");
 
     EXPECT_EQ(gr.shortestPath(0, 8), 3);
-    EXPECT_EQ(gr.spanningTreePrim(), 8);
+    EXPECT_EQ(gr.spanningTree(), 8);
 }

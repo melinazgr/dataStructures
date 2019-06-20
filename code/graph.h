@@ -24,7 +24,7 @@ typedef pair <int, int> pairInt;
 // uses an adjacency list to represent the graph
 // since every vertex can be a random integer number
 // we use a map to assing a unique index to every vertex number 
-class graph
+class Graph
 {
     private:
         int size; // size of graph
@@ -58,10 +58,12 @@ class graph
 
 
     public:
-        graph();
+        Graph();
 
         // inserts the edge (x, y) in the graph
         void insertEdge(int x, int y, int weight = 1);
+
+        void insert(int x, int y);
         
         // deletes the edge (x, y)
         void deleteEdge(int x, int y);
@@ -72,9 +74,7 @@ class graph
         // returns the number of the connected components
         int connectedComponents();
 
-        int spanningTreeDfs();
-
-        int spanningTreePrim();
+        int spanningTree();
         
         int shortestPath(int a, int b);
 
