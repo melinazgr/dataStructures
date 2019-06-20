@@ -5,7 +5,6 @@
 #include <map> 
 #include <vector>
 #include <string>
-#include <queue> 
 
 using namespace std;
 
@@ -17,12 +16,10 @@ struct edge
     edge(int to, int weight):to(to),weight(weight){}
 };
 
-bool operator == (const edge &e, const int &val)
-{
-    return e.to == val;
-}
+bool operator == (const edge &e, const int &val);
 
 typedef vector <edge> vertexAdjList;
+typedef pair <int, int> pairInt;
 
 // uses an adjacency list to represent the graph
 // since every vertex can be a random integer number
@@ -64,7 +61,7 @@ class graph
         graph();
 
         // inserts the edge (x, y) in the graph
-        void insertEdge(int x, int y);
+        void insertEdge(int x, int y, int weight = 1);
         
         // deletes the edge (x, y)
         void deleteEdge(int x, int y);

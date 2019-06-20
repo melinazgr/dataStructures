@@ -33,10 +33,9 @@ TEST_F(graphTest, graphInsert2)
     EXPECT_EQ(gr.connectedComponents(), 2);
 }
 
- TEST_F(graphTest, graphInsert5)
+TEST_F(graphTest, graphInsert5)
 {
     graph gr;
-
 
     gr.insertEdge(100, 101);
     gr.insertEdge(100, 104);
@@ -52,8 +51,7 @@ TEST_F(graphTest, graphInsert2)
     EXPECT_EQ(gr.getSize(), 5);
     EXPECT_EQ(gr.connectedComponents(), 1);
     EXPECT_EQ(gr.spanningTreePrim(), 4);
-
-
+    EXPECT_EQ(gr.shortestPath(100, 103), 2);
 
     gr.deleteEdge(101,102);
     gr.deleteEdge(102,103);
@@ -61,4 +59,26 @@ TEST_F(graphTest, graphInsert2)
     gr.print("graphInsert5b.txt");
 
     //EXPECT_EQ(gr.connectedComponents(), 2);
+}
+
+TEST_F(graphTest, shortesWeight)
+{
+    graph gr;
+
+    gr.insertEdge(0, 1);
+    gr.insertEdge(1, 2);
+    gr.insertEdge(2, 3);
+    gr.insertEdge(4, 5);
+    gr.insertEdge(5, 3);
+    gr.insertEdge(5, 2);
+    gr.insertEdge(5, 6);
+    gr.insertEdge(1, 7);
+    gr.insertEdge(7, 8);
+    gr.insertEdge(8, 6);
+    gr.insertEdge(8, 2);
+
+    gr.print("graphWeight.txt");
+
+    EXPECT_EQ(gr.shortestPath(0, 8), 3);
+    EXPECT_EQ(gr.spanningTreePrim(), 8);
 }

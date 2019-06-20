@@ -3,183 +3,17 @@
 #include <sstream>
 #include <string> 
 #include <vector> 
-#include <iomanip>
 
 #include "minheap.h"
 #include "maxheap.h"
-#include "heap.h"
 #include "avl.h"
 #include "hashtable.h"
 #include "graph.h"
 
+#include "commandParser.h"
+#include "output.h"
 #include "driver.h"
 #include "stopwatch.h"
-#include "linkedList.h"
-
-// include cpp files so as to compile main.cpp only
-#include "minheap.cpp"
-#include "maxheap.cpp"
-#include "heap.cpp"
-#include "avl.cpp"
-#include "hashtable.cpp"
-#include "graph.cpp"
-
-const string CMD_BUILD = "BUILD";
-const string CMD_INSERT = "INSERT";
-const string CMD_GETSIZE = "GETSIZE";
-const string CMD_FINDMIN = "FINDMIN";
-const string CMD_FINDMAX = "FINDMAX";
-const string CMD_DELETEMIN = "DELETEMIN";
-const string CMD_DELETEMAX = "DELETEMAX";
-const string CMD_DELETE = "DELETE";
-const string CMD_SEARCH = "SEARCH";
-const string CMD_COMPUTESHORTESTPATH = "COMPUTESHORTESTPATH";
-const string CMD_COMPUTESPANNINGTREE = "COMPUTESPANNINGTREE";
-const string CMD_FINDCONNECTEDCOMPONENTS = "FINDCONNECTEDCOMPONENTS";
-
-const string CMD_MINHEAP = "MINHEAP";
-const string CMD_MAXHEAP = "MAXHEAP";
-const string CMD_AVLTREE = "AVLTREE";
-const string CMD_GRAPH = "GRAPH";
-const string CMD_HASHTABLE = "HASHTABLE";
-
-//#define DEBUG_DS
-
-using namespace std;
-
-class commandParser
-{
-    private:
-        vector <string> tokens;
-
-    public:
-        commandParser()
-        {}
-
-        // Takes a line like this "BUILD MINHEAP a.txt"
-        // and produces three different tokens
-        bool parse(string line)
-        {
-            tokens.clear(); // erases previous entries
-            istringstream ss(line); // creates a string stream
-            string token;
-
-            // reads the words between spaces
-            while(getline(ss, token, ' ')) 
-            {
-                tokens.push_back(token); 
-            }
-
-            return !tokens.empty();
-        }
-
-        // returns the token at index if present
-        // otherwise returns an empty string
-        const string &getToken(int index)
-        {
-            static const string empty_string("");
-
-            if (tokens.size() <= index)
-            {
-                return empty_string;
-            }
-
-            return tokens.at(index);
-        }
-};
-
-// prints on output text file the results of minheap/maxheap commands
-void outputHeap(string dataStructure, string command, int data, ofstream &output, double time)
-{
-    if (command == CMD_BUILD || command == CMD_DELETEMIN || command == CMD_DELETEMAX)
-    {
-        output << command << " " << dataStructure;
-
-        #ifdef DEBUG_DS
-        for (int i = 0; i < data - 1; i++)
-        {
-            output << heap.getData(i) << " ";
-        }
-        #endif 
-    }
-
-    else if (command == CMD_INSERT)
-    {
-        output << command << " " << dataStructure << " " << data;
-    }
-
-    else if (command == CMD_FINDMIN || command == CMD_FINDMAX)
-    {
-        output << command << " " << dataStructure << " : " << data;
-    }
-
-    else if (command == CMD_GETSIZE)
-    {
-        output << command << " " << dataStructure << " : " << data;
-    }
-
-    output << "|| TIME : " << setprecision(10) << time << endl;
-}
-
-void outputHash(string command, int data, bool result, ofstream &output, double time)
-{
-    if (command == CMD_BUILD)
-    {
-        output << command << " " << CMD_HASHTABLE;
-    }
-
-    else if (command == CMD_INSERT || command == CMD_GETSIZE)
-    {
-        output << command << " " << CMD_HASHTABLE << " : " << data;
-    }
-
-    else if (command == CMD_SEARCH)
-    {
-        output << command << " " << CMD_HASHTABLE << " " << data << " : ";
-        
-        if (result) 
-        {
-            output <<"SUCCESS";
-        }
-
-        else
-        {
-            output << "FAILURE";
-        }
-    }
-
-    output << "|| TIME : " << setprecision(10) << time << endl;
-}
-
-void outputAvl(string command, int data, bool result, ofstream &output, double time)
-{
-    if (command == CMD_BUILD)
-    {
-        output << command << " " << CMD_AVLTREE;
-    }
-    
-    else if (command == CMD_GETSIZE || command == CMD_INSERT || command == CMD_DELETE || command == CMD_FINDMIN )
-    {
-        output << command << " " << CMD_AVLTREE << " : " << data;
-    }
-
-    else if (command == CMD_SEARCH)
-    {
-        output << command << " " << CMD_AVLTREE << " " << data << " : ";
-        
-        if (result) 
-        {
-            output <<"SUCCESS";
-        }
-
-        else
-        {
-            output << "FAILURE";
-        }
-    }
-
-    output << "|| TIME : " << setprecision(10) << time << endl;
-}
 
 int main()
 {
@@ -193,7 +27,6 @@ int main()
     
     ofstream output;
     output.open("output.txt");
-    
 
     if (!commands.is_open())
     {
@@ -206,8 +39,6 @@ int main()
         
     commandParser parser;
     stopwatch timer;
-
-    
 
     while (!commands.eof())
     {   
@@ -226,205 +57,203 @@ int main()
             timer.start();
 
             // BUILD command
-            if (arg1 == CMD_BUILD)
+            if (arg1 == output::CMD_BUILD)
             {
-                if (arg2 == CMD_MINHEAP)
+                if (arg2 == output::CMD_MINHEAP)
                 {
                     minHeapDriver minHeapBuilder(minheap);
                     minHeapBuilder.readSingle(arg3);
 
-                    outputHeap(CMD_MINHEAP, CMD_BUILD, 0, output, timer.elapsed());
+                    output::outputHeap(output::CMD_MINHEAP, output::CMD_BUILD, 0, output, timer.elapsed());
                 }
 
-                else if (arg2 == CMD_MAXHEAP)
+                else if (arg2 == output::CMD_MAXHEAP)
                 {
                     maxHeapDriver maxHeapBuilder(maxheap);
                     maxHeapBuilder.readSingle(arg3);
 
-                    outputHeap(CMD_MAXHEAP, CMD_BUILD, 0, output, timer.elapsed());
+                    output::outputHeap(output::CMD_MAXHEAP, output::CMD_BUILD, 0, output, timer.elapsed());
                 }
                 
-                else if (arg2 == CMD_AVLTREE)
+                else if (arg2 == output::CMD_AVLTREE)
                 {
                     cout << "avl build" << endl;
 
                     avlDriver avlBuilder(avl);
                     avlBuilder.readSingle(arg3);
                     
-                    outputAvl(CMD_BUILD, 0, false, output, timer.elapsed());
+                    output::outputAvl(output::CMD_BUILD, 0, false, output, timer.elapsed());
                 }
                 
-                else if (arg2 == CMD_HASHTABLE)
+                else if (arg2 == output::CMD_HASHTABLE)
                 {   
                     hashDriver hashTableBuilder(hash);
                     hashTableBuilder.readSingle(arg3);
 
-                    outputHash(CMD_BUILD, 0, false, output, timer.elapsed());  
+                    output::outputHash(output::CMD_BUILD, 0, false, output, timer.elapsed());  
                 }
 
-                else if (arg2 == CMD_GRAPH)
+                else if (arg2 == output::CMD_GRAPH)
                 {
                 }
             }
 
             // INSERT command
-            else if (arg1 == CMD_INSERT)
+            else if (arg1 == output::CMD_INSERT)
             {
-                if (arg2 == CMD_MINHEAP)
+                if (arg2 == output::CMD_MINHEAP)
                 {
                     int data = stoi(arg3);
                     minheap.insert(data);
 
-                    outputHeap(CMD_MINHEAP, CMD_INSERT, data, output, timer.elapsed()); 
+                    output::outputHeap(output::CMD_MINHEAP, output::CMD_INSERT, data, output, timer.elapsed()); 
                 }
 
-                else if (arg2 == CMD_MAXHEAP)
+                else if (arg2 == output::CMD_MAXHEAP)
                 {
                     int data = stoi(arg3);
                     maxheap.insert(data);
 
-                    outputHeap(CMD_MAXHEAP, CMD_INSERT, data, output, timer.elapsed());  
+                    output::outputHeap(output::CMD_MAXHEAP, output::CMD_INSERT, data, output, timer.elapsed());  
                 }
                 
-                else if (arg2 == CMD_AVLTREE)
+                else if (arg2 == output::CMD_AVLTREE)
                 {
                     cout << "insert build" << endl;
 
                     int data = stoi(arg3);
                     avl.insert(data);
-                    outputAvl(CMD_INSERT, data, false, output, timer.elapsed());
+                    output::outputAvl(output::CMD_INSERT, data, false, output, timer.elapsed());
                 }
                 
-                else if (arg2 == CMD_HASHTABLE)
+                else if (arg2 == output::CMD_HASHTABLE)
                 {
                     int data = stoi(arg3);
                     hash.insert(data);
-                    outputHash(CMD_INSERT, data, false, output, timer.elapsed());  
+                    output::outputHash(output::CMD_INSERT, data, false, output, timer.elapsed());  
                 }
 
-                else if (arg2 == CMD_GRAPH)
+                else if (arg2 == output::CMD_GRAPH)
                 {
                 }
             }
 
             // GETSIZE command
-            else if (arg1 == CMD_GETSIZE)
+            else if (arg1 == output::CMD_GETSIZE)
             {
-                if (arg2 == CMD_MINHEAP)
+                if (arg2 == output::CMD_MINHEAP)
                 {
                     int size = minheap.getSize();                       
-                    outputHeap(CMD_MINHEAP, CMD_GETSIZE, size, output, timer.elapsed());   
+                    output::outputHeap(output::CMD_MINHEAP, output::CMD_GETSIZE, size, output, timer.elapsed());   
                 }
 
-                else if (arg2 == CMD_MAXHEAP)
+                else if (arg2 == output::CMD_MAXHEAP)
                 {
                     int size = maxheap.getSize();
-                    outputHeap(CMD_MAXHEAP, CMD_GETSIZE, size, output, timer.elapsed());   
+                    output::outputHeap(output::CMD_MAXHEAP, output::CMD_GETSIZE, size, output, timer.elapsed());   
                 }
                 
-                else if (arg2 == CMD_AVLTREE)
+                else if (arg2 == output::CMD_AVLTREE)
                 {
                     int size = avl.getSize();
-                    outputAvl(CMD_GETSIZE, size, false, output, timer.elapsed());
+                    output::outputAvl(output::CMD_GETSIZE, size, false, output, timer.elapsed());
                 }
                 
-                else if (arg2 == CMD_HASHTABLE)
+                else if (arg2 == output::CMD_HASHTABLE)
                 {
                     int size = hash.getSize();
-                    outputHash(CMD_GETSIZE, size, false, output, timer.elapsed());
+                    output::outputHash(output::CMD_GETSIZE, size, false, output, timer.elapsed());
                 }
 
-                else if (arg2 == CMD_GRAPH)
+                else if (arg2 == output::CMD_GRAPH)
                 {
                 }
             }
 
             // FINDMIN/FINMAX command
-            else if (arg1 == CMD_FINDMIN || arg1 == CMD_FINDMAX)
+            else if (arg1 == output::CMD_FINDMIN || arg1 == output::CMD_FINDMAX)
             {
-                if (arg2 == CMD_MINHEAP)
+                if (arg2 == output::CMD_MINHEAP)
                 {
                     int min = maxheap.findRoot();
-                    outputHeap(CMD_MINHEAP, CMD_FINDMIN, min, output, timer.elapsed());    
+                    output::outputHeap(output::CMD_MINHEAP, output::CMD_FINDMIN, min, output, timer.elapsed());    
                 }
 
-                else if (arg2 == CMD_MAXHEAP)
+                else if (arg2 == output::CMD_MAXHEAP)
                 {
                     int max = maxheap.findRoot();
-                    outputHeap(CMD_MAXHEAP, CMD_FINDMAX, max, output, timer.elapsed());    
+                    output::outputHeap(output::CMD_MAXHEAP, output::CMD_FINDMAX, max, output, timer.elapsed());    
                 }
 
-                else if (arg2 == CMD_AVLTREE)
+                else if (arg2 == output::CMD_AVLTREE)
                 {
                 }
             }
 
             // DELETEMIN/DELETEMAX/DELETE command            
-            else if (arg1 == CMD_DELETEMIN || arg1 == CMD_DELETEMAX || arg1 == CMD_DELETE)
+            else if (arg1 == output::CMD_DELETEMIN || arg1 == output::CMD_DELETEMAX || arg1 == output::CMD_DELETE)
             {
-                if (arg2 == CMD_MINHEAP)
+                if (arg2 == output::CMD_MINHEAP)
                 {
                     maxheap.deleteRoot();
-                    outputHeap(CMD_MINHEAP, CMD_DELETEMIN, 0, output, timer.elapsed());  
+                    output::outputHeap(output::CMD_MINHEAP, output::CMD_DELETEMIN, 0, output, timer.elapsed());  
                 }
 
-                else if (arg2 == CMD_MAXHEAP)
+                else if (arg2 == output::CMD_MAXHEAP)
                 {
                     maxheap.deleteRoot();
-                    outputHeap(CMD_MAXHEAP, CMD_DELETEMAX, 0, output, timer.elapsed());     
+                    output::outputHeap(output::CMD_MAXHEAP, output::CMD_DELETEMAX, 0, output, timer.elapsed());     
                 }
 
-                else if (arg2 == CMD_AVLTREE)
+                else if (arg2 == output::CMD_AVLTREE)
                 {
                     int data = stoi(arg3);
                     avl.deleteNode(data);
 
-                    outputAvl(CMD_DELETE, data, false, output, timer.elapsed());
+                    output::outputAvl(output::CMD_DELETE, data, false, output, timer.elapsed());
                 }
 
-                else if (arg2 == CMD_GRAPH)
+                else if (arg2 == output::CMD_GRAPH)
                 {
                 }
             }
 
             // SEARCH command
-            else if (arg1 == CMD_SEARCH)
+            else if (arg1 == output::CMD_SEARCH)
             {
-                if (arg2 == CMD_AVLTREE)
+                if (arg2 == output::CMD_AVLTREE)
                 {
                     int data = stoi(arg3);
                     bool found = avl.search(data);
 
-                    outputAvl(CMD_DELETE, data, found, output, timer.elapsed());
+                    output::outputAvl(output::CMD_DELETE, data, found, output, timer.elapsed());
                 }
                 
-                else if (arg2 == CMD_HASHTABLE)
+                else if (arg2 == output::CMD_HASHTABLE)
                 {
                     int data = stoi(arg3);
                     bool found = hash.search(data);
 
-                    outputHash(CMD_SEARCH, data, found, output, timer.elapsed());
+                    output::outputHash(output::CMD_SEARCH, data, found, output, timer.elapsed());
                 }
             }
 
             // COMPUTESHORTESTPATH command
-            else if (arg1 == CMD_COMPUTESHORTESTPATH)
+            else if (arg1 == output::CMD_COMPUTESHORTESTPATH)
             {
             }
 
             // COMPUTESPANNINGTREE command
-            else if (arg1 == CMD_COMPUTESPANNINGTREE)
+            else if (arg1 == output::CMD_COMPUTESPANNINGTREE)
             {
             }
             
             // FINDCONNECTEDCOMPONENTS command
-            else if (arg1 == CMD_FINDCONNECTEDCOMPONENTS)
+            else if (arg1 == output::CMD_FINDCONNECTEDCOMPONENTS)
             {
             }
         }
     }
-
-    
 
     return 0;
 }

@@ -1,5 +1,13 @@
 #include "graph.h"
- 
+
+#include <queue> 
+#include <algorithm>
+
+bool operator == (const edge &e, const int &val)
+{
+    return e.to == val;
+}
+
 graph::graph()
 {
     size = 0;
@@ -29,7 +37,7 @@ int graph::insertVertex(int key)
     return size++;
 }
 
-void graph::insertEdge(int x, int y)
+void graph::insertEdge(int x, int y, int weight)
 {  
     int idxX = getVertexIndex(x);
     if(idxX == -1)
@@ -43,12 +51,12 @@ void graph::insertEdge(int x, int y)
         idxY = insertVertex(y);
     }
    
-    edge edgeY(idxY, 1);
+    edge edgeY(idxY, weight);
     vertices[idxX].push_back(edgeY);
     
     if(idxX != idxY)
     {
-        edge edgeX(idxX, 1);
+        edge edgeX(idxX, weight);
         vertices[idxY].push_back(edgeX);
     }
 }
@@ -100,25 +108,6 @@ void graph::dfsInternal(vector<bool> &visited, int v)
     }
 }
 
-
-int graph::dfsCount(vector<bool> &visited, int v, int &count)
-{   
-    visited[v] = true;
-
-    vertexAdjList::iterator itV;
-
-    for(itV = vertices[v].begin(); itV != vertices[v].end(); itV++)
-    {
-        if(!visited[(*itV).to])
-        {   
-            count++;
-            dfsCount(visited, (*itV).to, count);
-        }
-    }
-    
-    return count;
-}
-
 int graph::connectedComponents()
 {
     // mark the current vertex as visited
@@ -138,78 +127,75 @@ int graph::connectedComponents()
     return count;
 }
 
-
-int graph::spanningTreeDfs()
-{
-    vector <bool> visited(size, false);
-
-    int count = 0;
-
-    for(int i = 0; i < size; i++)
-    {
-        if(visited[i] == false)
-        {
-            dfsCount(visited, i, count);
-        }
-    }
-
-    vertexAdjList::iterator itV = vertices[0].begin();
-
-    int mst = dfsCount(visited, (*itV).to, count);
-
-    if(mst < size - 1)
-    {
-        return -1;
-    }
-    
-    return mst;
-}
-
-int graph::minDist(vector<int> dist, vector<bool> visited)
-{
-    int min = INT_MAX;
-    int min_index = -1;
-
-    for(int i = 0; i < size; i++)
-    {
-        if(visited[i] == false && dist[i] < min)
-        {
-            min = dist[i];
-            min_index = i;
-        }
-    }
-
-    return min_index;
-}
-
-int graph::minVal(vector<int> dist)
-{
-    int min = INT_MAX;
-    
-    for(vector<int>::iterator itI = dist.begin(); itI != dist.end(); itI++)
-    {
-        if(dist[*itI] < min)
-        {
-            min = dist[*itI];
-        }
-    }
-
-    return min;
-}
-
 int graph::prim(int v)
 {
     vector <bool> visited(size, false);
-    vector <int> dist(size, INT_MAX);
-    vector<int> q;
+    priority_queue <pairInt, vector <pairInt>, greater <pairInt>> q; 
 
-    dist[v] = 0;
-    q.push_back(v);
+    pairInt p;
+
+    int mst = 0;
+
+    q.push(make_pair(0, v));
 
     while(!q.empty())
     {
-        int u = minVal(dist);
-        q.erase(remove(q.begin(), q.end(), u), q.end());
+        p = q.top();
+        q.pop();
+
+        int u = p.second;
+
+        if(visited[u])
+        {
+            continue;
+        }
+
+        visited[u] = true;
+        mst += p.first;
+
+        for(vertexAdjList::iterator itU = vertices[u].begin(); itU != vertices[u].end(); itU++)
+        {
+            int w = (*itU).to;
+            if(!visited[w])
+            {
+                q.push(make_pair((*itU).weight, w));
+            }
+        }
+    }
+
+    return mst;
+}
+
+int graph::spanningTreePrim()
+{
+    return prim(0);
+}
+
+int graph::dijkstra(int x, int y)
+{
+    vector <bool> visited(size, false);
+    vector <int> dist(size, INT_MAX);
+    priority_queue <pairInt, vector <pairInt>, greater <pairInt>> q; 
+    
+    pairInt p;
+
+    int a = getVertexIndex(x);
+    int b = getVertexIndex(y);
+
+    if(a == -1 || b == -1)
+    {
+        return -1;
+    }
+
+    dist[a] = 0;
+    q.push(make_pair(0, a));
+
+    while(!q.empty())
+    {
+        p = q.top();
+        q.pop();
+
+        int u = p.second;
 
         if(visited[u])
         {
@@ -221,16 +207,46 @@ int graph::prim(int v)
         for(vertexAdjList::iterator itU = vertices[u].begin(); itU != vertices[u].end(); itU++)
         {
             int w = (*itU).to;
-            if(!visited[w] && dist[w] > (*itU).weight)
+            if(dist[w] > dist[u] + (*itU).weight)
             {
-                dist[w] = (*itU).weight;
-                q.push_back(w);
+                dist[w] =  dist[u] + (*itU).weight;
+                q.push(make_pair(dist[w], w));
             }
         }
     }
+
+    return dist[b];
 }
 
+int graph::shortestPath(int a, int b)
+{
+    return dijkstra(a,b);
+}
 
+// output the format of graph based on  
+// http://www.webgraphviz.com/
+void graph::print(ofstream &output)
+{   
+    output << "Digraph G {" << endl << endl;
+    for(int i = 0; i < size; i++)
+    {
+        for(vertexAdjList::iterator itV = vertices[i].begin(); itV != vertices[i].end(); itV++)
+        {
+           output <<  i << " -> " << (*itV).to << "[label=" << (*itV).weight <<"];"<< endl;
+        }
+    }
+
+    output << endl << "}" << endl;
+}
+
+void graph::print(const string &filename)
+{
+    ofstream output;
+    output.open(filename);
+
+    print(output);
+    output.close();
+}
 
 /*int graph::prim(int v)
 {
@@ -297,145 +313,66 @@ int graph::prim(int v)
 
     cout << " mst " << mst<< endl;
     return mst;
-}*/
 
-int graph::spanningTreePrim()
-{
-    return prim(0);
-}
-
-
-int graph::dijkstra(int a, int b)
-{
-    vector <bool> visited(size, false);
-    vector <int> dist(size, INT_MAX);
-    vector<int> q;
-
-    dist[a] = 0;
-    q.push_back(a);
-
-    while(!q.empty())
-    {
-        int u = minVal(dist);
-        q.erase(remove(q.begin(), q.end(), u), q.end());
-
-        if(visited[u])
-        {
-            continue;
-        }
-
-        visited[u] = true;
-
-        for(vertexAdjList::iterator itU = vertices[u].begin(); itU != vertices[u].end(); itU++)
-        {
-            int w = (*itU).to;
-            if(dist[w] > dist[u] + (*itU).weight)
-            {
-                dist[w] =  dist[u] + (*itU).weight;
-                q.push_back(w);
-            }
-        }
-    }
-
-    return dist[b];
-}
-
-int graph::shortestPath(int a, int b)
-{
-    return dijkstra(a,b);
-}
-/* void graph::bfs(int v)
-{
-    vector <bool> visited(size, false);
-    
-    vertexAdjList queue;
-
-    visited[v] = true;
-    queue.push_back(v);
-
-    while(!queue.empty())
-    {
-        queue.pop_back();
-
-        for(vertexAdjList::iterator itV = vertices[v].begin(); itV != vertices[v].end(); itV++)
-        {
-            if (!visited[(*itV).to]) 
-            { 
-                visited[(*itV).to] = true; 
-                queue.push_back((*itV).to); 
-            } 
-        }
-    }
-}
-
-int graph::bfsPath(int a, int b)
-{
-    vector <bool> visited(size, false);
-    vector<int> dist;
-    
-    bool found = false;
-    int path = 0;
-    
-    vertexAdjList queue;
-
-    visited[a] = true;
-    queue.push_back(a);
-
-    while(!queue.empty())
-    {
-        queue.pop_back();
-
-        for(vertexAdjList::iterator itV = vertices[a].begin(); itV != vertices[a].end(); itV++)
-        {
-            if (!visited[(*itV).to]) 
-            { 
-                visited[(*itV).to] = true; 
-                queue.push_back((*itV).to);
-                path++;
-
-                if((*itV).to == b)
-                {
-                    found = true;
-                    break;
-                }
-            } 
-        }
-
-        if(found)
-        {
-            return path;
-        }
-    }
-    return -1;
-}
-
-int graph::shortestPath(int a, int b)
-{
-    return bfsPath(a,b);
-}*/
-
-// output the format of graph based on  
-// http://www.webgraphviz.com/
-void graph::print(ofstream &output)
+int graph::dfsCount(vector<bool> &visited, int v, int &count)
 {   
-    output << "Digraph G {" << endl << endl;
+    visited[v] = true;
+
+    vertexAdjList::iterator itV;
+
+    for(itV = vertices[v].begin(); itV != vertices[v].end(); itV++)
+    {
+        if(!visited[(*itV).to])
+        {   
+            count++;
+            dfsCount(visited, (*itV).to, count);
+        }
+    }
+    
+    return count;
+}
+   
+
+int graph::spanningTreeDfs()
+{
+    vector <bool> visited(size, false);
+
+    int count = 0;
+
     for(int i = 0; i < size; i++)
     {
-        for(vertexAdjList::iterator itV = vertices[i].begin(); itV != vertices[i].end(); itV++)
+        if(visited[i] == false)
         {
-            
-           output <<  i << " -> " << (*itV).to << endl;
+            dfsCount(visited, i, count);
         }
     }
 
-    output << endl << "}" << endl;
+    vertexAdjList::iterator itV = vertices[0].begin();
+
+    int mst = dfsCount(visited, (*itV).to, count);
+
+    if(mst < size - 1)
+    {
+        return -1;
+    }
+    
+    return mst;
 }
 
-void graph::print(const string &filename)
+int graph::minDist(vector<int> dist, vector<bool> visited)
 {
-    ofstream output;
-    output.open(filename);
+    int min = INT_MAX;
+    int min_index = -1;
 
-    print(output);
-    output.close();
+    for(int i = 0; i < size; i++)
+    {
+        if(visited[i] == false && dist[i] < min)
+        {
+            min = dist[i];
+            min_index = i;
+        }
+    }
+
+    return min_index;
 }
+}*/

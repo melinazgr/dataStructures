@@ -1,6 +1,7 @@
 #pragma once 
 
 //class for heap
+//diagram URL: http://yuml.me/diagram/scruffy/class/edit/[Heap|getSize;getData;findRoot;deleteRoot;insert;swap|parent;right;left]^-[minHeap], [Heap]^-[maxHeap]
 class heap 
 {
     protected:
@@ -45,3 +46,4 @@ class heap
         // swaps two elements
         void swap(int *x, int *y); 
 };
+
