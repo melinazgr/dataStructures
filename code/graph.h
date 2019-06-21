@@ -7,7 +7,6 @@
 
 #include "hashTable.h"
 
-
 using namespace std;
 
 struct edge

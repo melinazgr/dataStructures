@@ -34,7 +34,6 @@ int main()
     if (!commands.is_open())
     {
         cerr << "commands not open" <<endl;
-        //TODO
         exit(1);
     }
 

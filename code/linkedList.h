@@ -16,100 +16,19 @@ class linkedList
 
     public:
         
-        linkedList()
-        {
-            head = nullptr;
-            size = 0;
-            allowDuplicates = false;
-        }
+        linkedList();
 
-        linkedList(bool allowDuplicates)
-        {
-            head = nullptr;
-            size = 0;
+        linkedList(bool allowDuplicates);
 
-            this->allowDuplicates = allowDuplicates;
-        }
+        ~linkedList();
+
+        int getSize();
+
+        virtual bool search(int key);
+
+        virtual bool find(int key, int &value);
         
-        ~linkedList()
-        {
-            linkedListNode* temp = head;
-            linkedListNode* prev;
+        virtual void insert(int key, int value = 0);
 
-            while (temp != nullptr)
-            {
-                prev = temp;
-                temp = temp->next;
-                delete prev;
-            }
-        }
-
-        virtual bool search(int key)
-        {
-            linkedListNode* temp = head;
-
-            while (temp != nullptr)
-            {   
-                if(temp->key == key)
-                {
-                    return true;
-                }
-                
-                temp = temp->next;
-            }
-
-            return false;
-        }
-
-        virtual bool find(int key, int &value)
-        {
-            linkedListNode* temp = head;
-
-            while (temp != nullptr)
-            {   
-                if (temp->key == key)
-                {
-                    value = temp->value;
-                    return true;
-                }
-                
-                temp = temp->next;
-            }
-
-            return false;
-        }
-        
-        virtual void insert(int key, int value = 0)
-        {   
-            bool found = search(key);
-            
-            if (found && !allowDuplicates)
-            {
-                return;
-            }
-
-            else
-            {
-                linkedListNode* newNode = new linkedListNode();
-                newNode->key = key;
-                newNode->value = value;
-                newNode->next = head;
-                head = newNode;
-
-                size++;
-            }
-        }
-
-        linkedListNode* replaceHead(linkedListNode* newHead)
-        {
-            linkedListNode* oldHead = head;
-            head = newHead;
-
-            return oldHead;
-        }
-
-        int getSize()
-        {
-            return size;
-        }
+        linkedListNode* replaceHead(linkedListNode* newHead);
 };

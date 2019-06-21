@@ -163,7 +163,7 @@ int Graph::prim(int v)
         }
 
         visited[u] = true;
-        //cout<< "visiting: "<<u<<" weight: " << weight<<endl;
+        //cout << "visiting: "<< u <<" weight: " << weight << endl;
         mst += weight;
 
         for(vertexAdjList::iterator itU = vertices[u].begin(); itU != vertices[u].end(); itU++)

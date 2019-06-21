@@ -20,6 +20,7 @@ class hashTable
         // destructor
         ~hashTable();
 
+        // initialize capacity
         int initialize(int capacity);
 
         // inserts an integer in the hash table

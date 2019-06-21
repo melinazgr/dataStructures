@@ -1,5 +1,7 @@
 #pragma once
 
+#include "sortedLinkedList.h"
+
 class priorityQueue 
 {
     private:
@@ -9,32 +11,11 @@ class priorityQueue
     
         priorityQueue():queue(true){}
 
-        void push(int key, int value)
-        {
-            queue.insert(key,value);
-        }
+        void push(int key, int value);
 
-        bool getTop(int &key, int &value)
-        {
-            linkedListNode* top = queue.getHead();
+        bool getTop(int &key, int &value);
 
-            if(top)
-            {
-                key = top->key;
-                value = top->value;
-                return true;
-            }
+        void pop();
 
-            return false;
-        }
-
-        void pop()
-        {
-            queue.deleteHead();
-        }
-
-        bool isEmpty()
-        {
-            return queue.getHead() == nullptr;
-        }
+        bool isEmpty();
 };

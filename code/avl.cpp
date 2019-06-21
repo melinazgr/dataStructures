@@ -71,7 +71,6 @@ bool avlTree::search(int data)
     return search(data, root) != nullptr;
 }
 
-
 avlNode* avlTree::search(int data, avlNode* p)
 {
     if (p == nullptr)

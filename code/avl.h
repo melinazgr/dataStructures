@@ -1,6 +1,5 @@
 #pragma once
 
-
 struct avlNode
 {
     int data;
@@ -46,26 +45,22 @@ class avlTree
 
         void deleteNode(int data, avlNode* &p);
 
-
-
-
     public:
         avlTree();
 
         ~avlTree();
+
+        int getSize();
+
+        int height(avlNode* p);
+
+        int findMin();
 
         void insert(int data);
 
         bool search(int data);
 
         void deleteNode(int data);
-        
-        int getSize();
 
-        int findMin();
-
-        int height(avlNode* p);
-        
         avlNode* getRoot(); // for test purposes
-
 };

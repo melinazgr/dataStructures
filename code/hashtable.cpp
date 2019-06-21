@@ -12,6 +12,7 @@ hashTable::~hashTable()
     delete [] buckets;
 }
 
+// initialiazes the capacity of the hash table with the use of prime numbers
 int hashTable::initialize(int newSize)
 {
     delete [] buckets;
@@ -61,7 +62,7 @@ void hashTable::insert(int key, int value)
 {
     int h = hashKey(key);
 
-    buckets[h].insert(key, value);
+    buckets[h].insert(key,value);
     size++;
 }
 
@@ -84,5 +85,5 @@ bool hashTable::find(int key, int &value)
 {
     int h = hashKey(key);
 
-    return buckets[h].find(key, value);
+    return buckets[h].find(key,value);
 }

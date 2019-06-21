@@ -11,55 +11,13 @@ class driver
 {
     public:
         virtual void insert(int x, int y = 0) = 0;
-
+        virtual void build(){};
+        
         // reads from a file with a single number on each line
-        void readSingle(const string &filename)
-        {
-            ifstream data;
-            data.open(filename);
-
-           
-            if(!data.is_open())
-            {
-                //TODO
-                exit(1);
-            }
-
-            int n;
-
-            while(!data.eof())
-            {
-                data >> n;
-                insert(n);
-            }
-
-            build();
-        }
+        void readSingle(const string &filename);
 
         // reads from a file with two numbers on each line
-        void readPair(const string &filename)
-        {
-            ifstream data;
-            data.open(filename);
-
-            if(!data.is_open())
-            {
-                //TODO
-                exit(1);
-            }
-
-            int a, b;
-
-            while(!data.eof())
-            {
-                data >> a >> b;
-                insert(a,b);
-            }
-
-            build();
-        }
-
-        virtual void build(){};
+        void readPair(const string &filename);
 };
 
 class minHeapDriver : public driver
@@ -69,10 +27,7 @@ class minHeapDriver : public driver
     public: 
         minHeapDriver(minHeap &_minheap):minheap(_minheap){}
 
-        void insert(int x, int y)
-        {
-            minheap.insert(x);
-        }
+        void insert(int x, int y){ minheap.insert(x); }
 };
 
 class maxHeapDriver : public driver
@@ -82,10 +37,7 @@ class maxHeapDriver : public driver
     public: 
         maxHeapDriver(maxHeap &_maxheap):maxheap(_maxheap){}
 
-        void insert(int x, int y)
-        {
-            maxheap.insert(x);
-        }
+        void insert(int x, int y){ maxheap.insert(x); }
 };
 
 class avlDriver : public driver
@@ -95,10 +47,7 @@ class avlDriver : public driver
     public: 
         avlDriver(avlTree &_avl):avl(_avl){}
 
-        void insert(int x, int y)
-        {
-            avl.insert(x);
-        }
+        void insert(int x, int y){ avl.insert(x); }
 };
 
 class hashDriver : public driver
@@ -110,25 +59,9 @@ class hashDriver : public driver
     public: 
         hashDriver(hashTable &_hash):hash(_hash){}
 
-        void insert(int x, int y)
-        {
-            list.insert(x);
-        }
+        void insert(int x, int y) { list.insert(x); }
 
-        virtual void build()
-        {
-            int size = list.getSize();
-            linkedListNode* head = list.replaceHead(nullptr);
-
-            hash.initialize(size);
-
-            for(linkedListNode* p = head; p;)
-            {
-                linkedListNode* temp = p->next;
-                hash.insert(p);
-                p = temp;
-            }
-        }
+        virtual void build();
 };
 
 class graphDriver : public driver
@@ -138,8 +71,5 @@ class graphDriver : public driver
     public: 
         graphDriver(Graph &_graph):graph(_graph){}
 
-        void insert(int x, int y)
-        {
-            graph.insert(x, y);
-        }
+        void insert(int x, int y){ graph.insert(x, y); }
 };

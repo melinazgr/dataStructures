@@ -15,10 +15,7 @@ class heap
         virtual void heapify(int i) = 0;
 
     public:
-        // constructor
         heap(); 
-
-        // destructor
         ~heap();
 
         // returns the size of the min heap
@@ -50,4 +47,3 @@ class heap
         // swaps two elements
         void swap(int &x, int &y); 
 };
-

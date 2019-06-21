@@ -1,6 +1,5 @@
 #include "heap.h"
 
-// constructor: builds a heap of given size
 heap::heap()
 {
     size = 0;
@@ -8,7 +7,6 @@ heap::heap()
     data = new int[capacity];
 }
 
-// destructor: frees the dynamically allocated memory
 heap::~heap()
 {
     delete [] data;
