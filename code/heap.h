@@ -12,6 +12,8 @@ class heap
         // fix the heap if it is violated
         virtual void adjustHeap(int i) = 0;
 
+        virtual void heapify(int i) = 0;
+
     public:
         // constructor
         heap(); 
@@ -37,6 +39,8 @@ class heap
         // returns the root of the heap
         int findRoot();
 
+        bool isLeaf(int i);
+
         // inserts a new number 'x'
         void insert(int x);
 
@@ -44,6 +48,6 @@ class heap
         virtual void deleteRoot() = 0;
         
         // swaps two elements
-        void swap(int *x, int *y); 
+        void swap(int &x, int &y); 
 };
 

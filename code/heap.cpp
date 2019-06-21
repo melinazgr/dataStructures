@@ -51,12 +51,17 @@ int heap::findRoot()
     return data[0];
 }
 
-// swaps two elements
-void heap::swap(int *x, int*y)
+bool heap::isLeaf(int i)
 {
-    int temp = *x;
-    *x = *y;
-    *y = temp;
+    return (i >= (size / 2) && i <= size); 
+}
+
+// swaps two elements
+void heap::swap(int &x, int &y)
+{
+    int temp = x;
+    x = y;
+    y = temp;
 }
 
 // inserts a new number 'x'

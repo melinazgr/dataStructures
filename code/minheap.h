@@ -11,4 +11,6 @@ class minHeap : public heap
 
         // fix the heap if it is violated
         virtual void adjustHeap(int i);
+
+        virtual void heapify(int i);
 };
