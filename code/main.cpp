@@ -179,9 +179,10 @@ int main()
 
                 else if (arg2 == output::CMD_GRAPH)
                 {
-                    int data = graph.getSize();
+                    int edges;
+                    int size = graph.getSize(edges);
 
-                    output::outputGraph(output::CMD_GETSIZE, data, 0, empty, output, timer.elapsed());
+                    output::outputGraph(output::CMD_GETSIZE, size, edges, empty, output, timer.elapsed());
                 }
             }
 

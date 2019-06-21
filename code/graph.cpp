@@ -11,6 +11,7 @@ bool operator == (const edge &e, const int &val)
 Graph::Graph()
 {
     size = 0;
+    edgeCount = 0;
 }
 
 int Graph::getVertexIndex(int key)
@@ -56,6 +57,7 @@ void Graph::insertEdge(int x, int y, int weight)
     {
         edge edgeX(idxX, weight);
         vertices[idxY].push_back(edgeX);
+        edgeCount++;
     }
 }
 
@@ -91,8 +93,9 @@ void Graph::deleteEdge(int x, int y)
     }
 }
 
-int Graph::getSize()
+int Graph::getSize(int &edges)
 {
+    edges = edgeCount;
     return size;
 }
 
@@ -263,132 +266,3 @@ void Graph::print(const string &filename)
     print(output);
     output.close();
 }
-
-/*int graph::prim(int v)
-{
-    vector <bool> visited(size, false);
-    vector <int> dist(size, INT_MAX);
-    vector <int> predecessor(size, 0);
-
-    int mst = 0;
-
-    bool completed = false;
-
-    dist[v] = 0;
-
-    while(completed == false)
-    {
-        int u = minDist(dist, visited);
-
-        if(u == -1)
-        {
-            break;
-        }
-
-        visited[u] = true;
-    
-        for(vertexAdjList::iterator itU = vertices[u].begin(); itU != vertices[u].end(); itU++)
-        {
-            int w = (*itU).to;
-            if(!visited[w] && dist[w] > (*itU).weight)
-            {
-                dist[w] = (*itU).weight;
-                predecessor[w] = u;
-            }
-        }
-
-        completed = true;
-        for(int i = 0; i < size; i++)
-        {
-            if(!visited[i])
-            {
-                completed = false;
-                break;
-            }
-        }
-    }
-    
-    int from = -1, to = 0;
-    
-    for(vector<int>::iterator itI = predecessor.begin(); itI != predecessor.end(); itI++, to++)
-    {   
-        from = (*itI);
-
-        vertexAdjList::iterator e = std::find(vertices[from].begin(), vertices[from].end(), to);
-
-        if(e == vertices[from].end() || from == to)
-        {
-            continue;
-        }
-
-        mst += (*e).weight;
-       
-        cout << from << " -> " << to << " weight "<< (*e).weight<< endl;
-
-    }
-
-    cout << " mst " << mst<< endl;
-    return mst;
-
-int graph::dfsCount(vector<bool> &visited, int v, int &count)
-{   
-    visited[v] = true;
-
-    vertexAdjList::iterator itV;
-
-    for(itV = vertices[v].begin(); itV != vertices[v].end(); itV++)
-    {
-        if(!visited[(*itV).to])
-        {   
-            count++;
-            dfsCount(visited, (*itV).to, count);
-        }
-    }
-    
-    return count;
-}
-   
-
-int graph::spanningTreeDfs()
-{
-    vector <bool> visited(size, false);
-
-    int count = 0;
-
-    for(int i = 0; i < size; i++)
-    {
-        if(visited[i] == false)
-        {
-            dfsCount(visited, i, count);
-        }
-    }
-
-    vertexAdjList::iterator itV = vertices[0].begin();
-
-    int mst = dfsCount(visited, (*itV).to, count);
-
-    if(mst < size - 1)
-    {
-        return -1;
-    }
-    
-    return mst;
-}
-
-int graph::minDist(vector<int> dist, vector<bool> visited)
-{
-    int min = INT_MAX;
-    int min_index = -1;
-
-    for(int i = 0; i < size; i++)
-    {
-        if(visited[i] == false && dist[i] < min)
-        {
-            min = dist[i];
-            min_index = i;
-        }
-    }
-
-    return min_index;
-}
-}*/

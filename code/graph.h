@@ -29,7 +29,8 @@ typedef pair <int, int> pairInt;
 class Graph
 {
     private:
-        int size; // size of graph
+        int size; // number of vertices
+        int edgeCount; 
         
         vector<vertexAdjList> vertices;
         
@@ -72,7 +73,7 @@ class Graph
         void deleteEdge(int x, int y);
 
         // returns the size of the graph
-        int getSize();
+        int getSize(int &edges);
 
         // returns the number of the connected components
         int connectedComponents();

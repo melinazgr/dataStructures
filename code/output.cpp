@@ -127,7 +127,12 @@ void output::outputGraph(string command, int data1, int data2, vector<int> data,
         output << command << " " << CMD_GRAPH << " " << data1 << " - " << data2;
     }
 
-    else if (command == CMD_GETSIZE || command == CMD_COMPUTESHORTESTPATH || command == CMD_FINDCONNECTEDCOMPONENTS)
+    else if (command == CMD_GETSIZE)
+    {
+        output << command << " " << CMD_GRAPH << " " << data1 << " " << data2;
+    }
+
+    else if (command == CMD_COMPUTESHORTESTPATH || command == CMD_FINDCONNECTEDCOMPONENTS)
     {
         output << command << " " << CMD_AVLTREE << " : " << data1;
     }
