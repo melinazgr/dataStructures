@@ -1,5 +1,5 @@
 #include "gtest/gtest.h"
-#include "hashTable.cpp"
+#include "hashTable.h"
 #include "driver.h"
 
 using namespace std;

@@ -1,6 +1,6 @@
 #include "gtest/gtest.h"
-#include "minheap.cpp"
-#include "heap.cpp"
+#include "minheap.h"
+#include "heap.h"
 
 using namespace std;
 

@@ -35,7 +35,7 @@ bool sortedLinkedList::find(int key, int &value)
     return false;
 }
 
-void sortedLinkedList::insert(int key, int value = 0)
+void sortedLinkedList::insert(int key, int value)
 {
     linkedListNode* p = head;
     linkedListNode* prevP = nullptr;

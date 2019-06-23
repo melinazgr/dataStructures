@@ -1,5 +1,5 @@
 #include "gtest/gtest.h"
-#include "graph.cpp"
+#include "graph.h"
 #include <iostream>
 #include <fstream>
 #include <vector>
@@ -16,27 +16,31 @@ class graphTest : public ::testing::Test
 TEST_F(graphTest, graphInsert2)
 {
     Graph gr;
+    int edges;
 
     gr.insertEdge(100, 100);
-    EXPECT_EQ(gr.getSize(), 1);
+    EXPECT_EQ(gr.getSize(edges), 1);
+    EXPECT_EQ(edges, 0);
+
     EXPECT_EQ(gr.connectedComponents(), 1)<<"error 1";
 
     gr.insertEdge(101, 101);
-    EXPECT_EQ(gr.getSize(), 2);
+    EXPECT_EQ(gr.getSize(edges), 2);
     EXPECT_EQ(gr.connectedComponents(), 2)<<"error 2";
 
     gr.insertEdge(100, 101);
-    EXPECT_EQ(gr.getSize(), 2);
+    EXPECT_EQ(gr.getSize(edges), 2);
     ASSERT_EQ(gr.connectedComponents(), 1)<<"error 3";
 
     gr.deleteEdge(100,101);
-    EXPECT_EQ(gr.getSize(), 2);
+    EXPECT_EQ(gr.getSize(edges), 2);
     EXPECT_EQ(gr.connectedComponents(), 2);
 }
 
 TEST_F(graphTest, graphInsert5)
 {
     Graph gr;
+    int edges;
 
     vector<int> st; 
 
@@ -51,7 +55,7 @@ TEST_F(graphTest, graphInsert5)
     gr.print("graphInsert5a.txt");
 
 
-    EXPECT_EQ(gr.getSize(), 5);
+    EXPECT_EQ(gr.getSize(edges), 5);
     EXPECT_EQ(gr.connectedComponents(), 1);
     gr.spanningTree(st);
 

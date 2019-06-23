@@ -1,5 +1,5 @@
 #include "gtest/gtest.h"
-#include "avl.cpp"
+#include "avl.h"
 
 class avlTest : public ::testing::Test 
 {

@@ -1,6 +1,6 @@
 #include "gtest/gtest.h"
-#include "maxheap.cpp"
-#include "heap.cpp"
+#include "maxheap.h"
+#include "heap.h"
 
 using namespace std;
 

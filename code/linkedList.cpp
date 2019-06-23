@@ -63,7 +63,7 @@ bool linkedList::find(int key, int &value)
     return false;
 }
 
-void linkedList::insert(int key, int value = 0)
+void linkedList::insert(int key, int value)
 {   
     bool found = search(key);
     
