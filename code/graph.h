@@ -20,7 +20,6 @@ struct edge
 bool operator == (const edge &e, const int &val);
 
 typedef vector <edge> vertexAdjList;
-typedef pair <int, int> pairInt;
 
 // uses an adjacency list to represent the graph
 // since every vertex can be a random integer number

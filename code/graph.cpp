@@ -196,8 +196,6 @@ int Graph::dijkstra(int x, int y)
     vector <bool> visited(size, false);
     vector <int> dist(size, INT_MAX);
     priorityQueue q;
-    
-    pairInt p;
 
     int a = getVertexIndex(x);
     int b = getVertexIndex(y);

@@ -28,11 +28,28 @@ class output
         static const string CMD_GRAPH;
         static const string CMD_HASHTABLE;
 
-        static void outputHeap(string dataStructure, string command, int data, ofstream &output, double time);
+        static void outputHeap(string dataStructure, 
+                               string command, 
+                               int data, 
+                               ofstream &output, 
+                               double time);
 
-        static void outputHash(string command, int data, bool result, ofstream &output, double time);
+        static void outputHash(string command, 
+                               int data, 
+                               bool result, 
+                               ofstream &output, 
+                               double time);
 
-        static void outputAvl(string command, int data, bool result, ofstream &output, double time);
+        static void outputAvl(string command, 
+                              int data, 
+                              bool result, 
+                              ofstream &output, 
+                              double time);
 
-        static void outputGraph(string command, int data1, int data2, vector<int> data, ofstream &output, double time);
+        static void outputGraph(string command, 
+                                int data1, 
+                                int data2,
+                                vector<int> data, 
+                                ofstream &output, 
+                                double time);
 };

@@ -10,7 +10,7 @@
 class driver
 {
     public:
-        virtual void insert(int x, int y = 0) = 0;
+        virtual void insert(int first, int second = 0) = 0;
         virtual void build(){};
         
         // reads from a file with a single number on each line
@@ -47,7 +47,7 @@ class avlDriver : public driver
     public: 
         avlDriver(avlTree &_avl):avl(_avl){}
 
-        void insert(int x, int y){ avl.insert(x); }
+        void insert(int first, int second){ avl.insert(first); }
 };
 
 class hashDriver : public driver
@@ -71,5 +71,5 @@ class graphDriver : public driver
     public: 
         graphDriver(Graph &_graph):graph(_graph){}
 
-        void insert(int x, int y){ graph.insert(x, y); }
+        void insert(int first, int second){ graph.insert(first, second); }
 };
